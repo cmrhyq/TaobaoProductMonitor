@@ -1,0 +1,21 @@
+webInterface:
+  chrome:
+    path: "H:/4.GitHub/4.python_code/TaobaoProductMonitor/resource/driver/chromedriver.exe"
+  edge:
+    path: "H:/4.GitHub/4.python_code/TaobaoProductMonitor/resource/driver/msedgeriver.exe"
+log:
+  level: INFO
+  filename: 'log/product_monitor.log'
+  format: '%(asctime)s [%(threadName)s-%(process)d-%(thread)d] - %(filename)s - [line:%(lineno)d] - [%(levelname)s]: %(message)s'
+taobao:
+  cron: '* 6,20 * * 2,4'
+mail:
+  host: smtp.163.com
+  sender: abc@163.com
+  license: 998101
+database:
+  host: "localhost"
+  port: 3306
+  user: "root"
+  pass: "123456"
+  db: "store"
