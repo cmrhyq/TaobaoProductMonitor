@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 import schedule
 import time
 
@@ -14,7 +16,7 @@ logger.add(sysConf['log']['filename'])
 
 
 def job():
-    logger.info("产品监控定时任务开始执行")
+    logger.info("产品监控定时任务开始执行，执行时间：%s" % datetime.now())
     dicts = query_monitor_products()
     for i in dicts:
         get_product_price(i)

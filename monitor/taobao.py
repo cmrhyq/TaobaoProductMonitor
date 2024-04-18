@@ -39,6 +39,7 @@ def get_product_price(info: dict):
     """
     browser.maximize_window()
     browser.get(info['product_url'])
+    logger.info("开始监控%s的价格" % info['product_url'])
     sleep(3)
     now_price = float(browser.find_element(By.XPATH, '//*[@id="detail_container"]/div[3]/div[1]/div[1]/div[2]').text)
     product_id = info['product_id']
