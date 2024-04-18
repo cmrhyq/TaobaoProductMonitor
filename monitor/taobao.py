@@ -21,7 +21,7 @@ from config.read_yaml import read_conf_yaml
 from database.data import insert_products, query_price_count, query_first_price, insert_price, update_product_status
 from utils.common import get_url_params
 from utils.send_email import send
-from utils.template import email_template
+from utils.template import EmailTemplate
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 root = curPath[:curPath.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
@@ -53,9 +53,8 @@ def get_product_price(info: dict):
             receivers = info["notify_email"]
             licenses = sysConf['mail']['license']
             theme = """【%s】产品价格监控降价通知""" % info["product_name"]
-            content = email_template.price_reduction.value % (
-                receivers, info["product_name"], first_price, now_price, float(first_price) - now_price)
-            send(host, sender, receivers, licenses, theme, content)
+            template = EmailTemplate(info["product_name"], first_price, now_price, float(first_price) - now_price, info['product_url'])
+            send(host, sender, receivers, licenses, theme, template.price_reduction())
             update_product_status(product_id, 12)
         else:
             price_id = insert_price(product_id, now_price)
