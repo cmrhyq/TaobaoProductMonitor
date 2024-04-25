@@ -41,19 +41,26 @@ def get_product_price(info: dict):
     browser.get(info['product_url'])
     logger.info("开始监控%s的价格" % info['product_url'])
     sleep(3)
-    now_price = float(browser.find_element(By.XPATH, '//*[@id="detail_container"]/div[3]/div[1]/div[1]/div[2]').text)
+    now_price = float(browser.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/span[2]').text)
     product_id = info['product_id']
     monitor_count = query_price_count(product_id)['count']
     if monitor_count > 0:
         price_info = query_first_price(product_id)
         first_price = price_info['price']
         if now_price < first_price:
+            # 构建邮件信息
             host = sysConf['mail']['host']
             sender = sysConf['mail']['sender']
             receivers = info["notify_email"]
             licenses = sysConf['mail']['license']
             theme = """【%s】产品价格监控降价通知""" % info["product_name"]
-            template = EmailTemplate(info["product_name"], first_price, now_price, float(first_price) - now_price, info['product_url'])
+            # 构建模板
+            template_info = {"template_name": "price_reduction.html", "product_name": info["product_name"],
+                             "first_price": first_price, "now_price": now_price,
+                             "reduction": float(first_price) - now_price,
+                             "product_url": info['product_url']}
+            template = EmailTemplate(template_info)
+
             send(host, sender, receivers, licenses, theme, template.price_reduction())
             update_product_status(product_id, 12)
         else:

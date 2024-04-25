@@ -9,42 +9,42 @@
 @Version 0.0.1
 @Description None
 """
+import os
 
 
 class EmailTemplate(object):
-    def __init__(self, product_name, first_price, now_price, reduction, product_url):
-        self.symbol = "%"
-        self.product_name = product_name
-        self.first_price = first_price
-        self.now_price = now_price
-        self.reduction = reduction
-        self.product_url = product_url
+    def __init__(self, template_info):
+        """
+        初始化
+        :param template_info: dict类型 - 模板需要的信息：必须包含的字段有 template_name，其他字段根据模板需要定义
+        """
+        self.cur_path = os.path.abspath(os.path.dirname(__file__))
+        self.root = self.cur_path[:self.cur_path.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
+        self.template_url = "resource/template"
+        self.template_info = template_info
+
+    def read_template(self):
+        """
+        读取模板
+        :return:
+        """
+        file_path = self.root + os.path.sep + self.template_url + os.path.sep + self.template_info["template_name"]
+        print(file_path)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            txt = f.read()
+        return txt
 
     def price_reduction(self):
-        return """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>产品降价通知</title>
-</head>
-<body style="font-family: Arial, sans-serif;background-color: #f8f8f8;margin: 0;padding: 0;">
-<div class="container" style="max-width: 600px;margin: 0 auto;padding: 20px;background-color: #ffffff;border-radius: 10px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <h3 style="color: #333333;text-align: center;">{}</h3>
-    <p style="color: #666666;line-height: 1.6;margin-bottom: 20px;">首次监控价格{}</p>
-    <p style="color: #666666;line-height: 1.6;margin-bottom: 20px;">当前监控价格{}</p>
-    <p style="color: #666666;line-height: 1.6;margin-bottom: 20px;">已降价{}</p>
-    <tr>
-        <td align="center" valign="top" class="em_hide em_aside17"
-            style="font-size: 0px; line-height: 0px; border-collapse: collapse;">
-            <img src="http://cdn.mcauto-images-production.sendgrid.net/b6d0217aa232514a/04898e5e-fa43-4f6d-89a5-4e507ec31407/1054x14.png"
-                 width="526" alt=""
-                 style="display: block; max-width: 600px; color: rgb(255, 255, 255); border: 0px; outline: none;"
-                 border="0"></td>
-    </tr>
-    <p style="text-align: center;color: #666666;line-height: 1.6;margin-bottom: 20px;"><a href="{}" style="display: inline-block;padding: 10px 20px;background-color: #4CAF50;color: #ffffff;text-decoration: none;border-radius: 5px;">了解更多</a></p>
-</div>
-</body>
-</html>
-        """.format(self.product_name, self.first_price, self.now_price, self.reduction, self.product_url)
+        """
+        使用此模板需要包含以下字段：product_name, first_price, now_price, reduction, product_url
+        :return:
+        """
+        read_template = self.read_template()
+        return read_template.format(self.template_info["product_name"], self.template_info["first_price"],
+                                    self.template_info["now_price"], self.template_info["reduction"], self.template_info["product_url"])
+
+
+if __name__ == '__main__':
+    dist = {"template_name": "price_reduction.html", "product_name": "1", "first_price": "2", "now_price": "3",
+            "reduction": "4", "product_url": "4"}
+    print(EmailTemplate(dist).price_reduction())
