@@ -17,17 +17,16 @@ from loguru import logger
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-from config.read_yaml import read_conf_yaml
+
+from common.read_conf import ReadConfig
 from database.data import insert_products, query_price_count, query_first_price, insert_price, update_product_status
 from utils.common import get_url_params
 from utils.send_email import send
 from utils.template import EmailTemplate
 
-curPath = os.path.abspath(os.path.dirname(__file__))
-root = curPath[:curPath.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
+rc = ReadConfig()
 
-sysConf = read_conf_yaml(root + os.path.sep + 'config/web_config.yaml')
-path = Service(sysConf['webInterface']['chrome']['path'])
+path = Service(rc.web_chrome_driver_path)
 browser = webdriver.Chrome(service=path)
 
 
@@ -49,10 +48,10 @@ def get_product_price(info: dict):
         first_price = price_info['price']
         if now_price < first_price:
             # 构建邮件信息
-            host = sysConf['mail']['host']
-            sender = sysConf['mail']['sender']
+            host = rc.mail_host
+            sender = rc.mail_sender
             receivers = info["notify_email"]
-            licenses = sysConf['mail']['license']
+            licenses = rc.mail_license
             theme = """【%s】产品价格监控降价通知""" % info["product_name"]
             # 构建模板
             template_info = {"template_name": "price_reduction.html", "product_name": info["product_name"],

@@ -10,16 +10,13 @@
 @Description None
 """
 import decimal
-import os
 
 from loguru import logger
-from config.read_yaml import read_conf_yaml
-from database.mysql_util import MySQLUtil
 
-curPath = os.path.abspath(os.path.dirname(__file__))
-root = curPath[:curPath.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
+from common.read_conf import ReadConfig
+from utils.mysql_utils import MySQLUtil
 
-sysConf = read_conf_yaml(root + os.path.sep + 'config/web_config.yaml')
+rc = ReadConfig()
 
 
 def query_monitor_products():
@@ -27,12 +24,12 @@ def query_monitor_products():
     查询需要监控的产品
     :return: dict
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, int(rc.database_port), rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
         select *
-        from store.products
+        from products
         where monitor_status in (10,11)
         """
         logger.info("====================query_monitor_products Action")
@@ -55,11 +52,11 @@ def insert_products(platform: str, product_name: str, product_url: str, product_
     :param notify_email: 通知邮箱地址
     :return: 产品id
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, rc.database_port, rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
-        insert into store.products (
+        insert into products (
             user_id, platform, product_url, product_name, product_tk, notify_email
         )
         values (
@@ -88,11 +85,11 @@ def update_product_status(product_id: int, monitor_status: int):
     :param monitor_status: 监控状态
     :return:
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, rc.database_port, rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
-        update store.products
+        update products
         set monitor_status = %s
         where product_id = %s
         """ % (monitor_status, product_id)
@@ -117,12 +114,12 @@ def query_price_count(product_id: int):
     :param product_id: 产品id
     :return: dict<数据条数>
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, rc.database_port, rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
         select count(*) as count
-        from store.price_change
+        from price_change
         where product_id = %s
         """ % product_id
         logger.info("====================query_price_count Action")
@@ -142,12 +139,12 @@ def query_first_price(product_id: int):
     :param product_id:
     :return: dict
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, rc.database_port, rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
         select *
-        from store.price_change
+        from price_change
         WHERE product_id = %s
         ORDER BY gmt_create
         limit 0,1
@@ -171,11 +168,11 @@ def insert_price(product_id: int, price: decimal):
     :param notify_email: 通知邮箱地址
     :return: price_id
     """
-    mysql = MySQLUtil(sysConf['database']['host'], sysConf['database']['port'], sysConf['database']['user'],
-                      sysConf['database']['pass'], sysConf['database']['db'])
+    mysql = MySQLUtil(rc.database_host, rc.database_port, rc.database_username,
+                      rc.database_password, rc.database_db)
     try:
         sql = """
-        insert into store.price_change(
+        insert into price_change(
         product_id, price
         )
         values (

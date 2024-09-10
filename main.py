@@ -5,13 +5,12 @@ from datetime import datetime
 
 from loguru import logger
 
-from config.read_yaml import read_conf_yaml
+from common.logging_log import MyLogger
+from common.read_conf import ReadConfig
 from task.task import product_monitor_task
 
-curPath = os.path.abspath(os.path.dirname(__file__))
-root = curPath[:curPath.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
-sysConf = read_conf_yaml(root + os.path.sep + 'config/web_config.yaml')
-logger.add(sysConf["log"]["filename"])
+rc = ReadConfig()
+log = MyLogger(tag=rc.log_tag, colorful=True, save_pth=rc.log_save_path, existing_counts=rc.log_exist_counts)
 
 
 def job():

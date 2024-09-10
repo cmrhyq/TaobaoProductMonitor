@@ -1,0 +1,9 @@
+2024-04-26 01:01:00.889 | INFO     | __main__:job:18 - 任务开始执行，2024-04-26 01:01:00.889467
+2024-04-26 01:01:00.899 | INFO     | database.data:query_monitor_products:38 - ====================query_monitor_products Action
+2024-04-26 01:01:00.899 | INFO     | database.data:query_monitor_products:39 - 
+        select *
+        from store.products
+        where monitor_status in (10,11)
+        
+2024-04-26 01:01:00.899 | INFO     | database.data:query_monitor_products:40 - ====================query_monitor_products End
+2024-04-26 01:01:00.901 | INFO     | __main__:job:20 - 任务执行结束，2024-04-26 01:01:00.901324

@@ -5,15 +5,49 @@
 - 商品价格降价监控
 - 降价邮件通知
 
+## 代码结构说明
+```
+├── common                          -- 常用代码目录
+│   ├── logging_log.py              -- 日志模块代码
+│   └── read_conf.py                -- 读取config.ini配置代码
+├── database                        -- 数据模块目录
+│   └── data.py                     -- 操作数据库模块代码
+├── logs                            -- 日志目录
+│   └── product_monitor.log         -- 运行日志
+├── monitor                         -- 监控模块目录
+│   └── taobao.py                   -- 淘宝商品监控代码
+├── resource                        -- 资源目录
+│   ├── driver                      -- db文件目录
+│   │   └── chromedriver.exe        -- selenium的浏览器驱动
+│   └── template                    -- 图片目录
+│   │   └── ...                     -- 邮件报告模板文件
+│   └── config.ini                  -- 核心配置文件
+├── sql                             -- 数据库脚本目录
+│   ├── product_monitor.sql         -- 初始化脚本代码
+├── system                          -- 系统代码目录
+│   └── conf.py                     -- 系统配置文件代码
+├── task                            -- 任务代码目录
+│   └── task.py                     -- 任务调度代码
+├── utils                           -- 工具代码目录
+│   ├── common.py                   -- 常用工具代码
+│   ├── mysql_utils.py              -- mysql工具代码
+│   ├── send_email.py               -- 发送邮件代码
+│   ├── template.py                 -- 邮件模板工具代码
+│   └── time_utils.py               -- 时间工具代码
+├── main.py                         -- 程序入口代码
+├── README.md                       -- 本文档
+└── requirements.txt                -- 运行本程序需要的依赖
+```
+
 ## 使用方法
 
 ### 一、修改配置
 
-- 修改项目目录下的config/web_config.yaml中的配置
+- 修改项目目录下的resource/config.ini中的配置
 
 ### 二、浏览器driver
 
-- 下载适合的浏览器driver放入项目的/resource/driver目录下
+- 下载适合的浏览器driver放入项目的resource/driver目录下
 
 ### 三、运行sql脚本
 

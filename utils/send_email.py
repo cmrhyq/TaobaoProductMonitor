@@ -22,12 +22,6 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
 from datetime import datetime
-from config.read_yaml import read_conf_yaml
-
-curPath = os.path.abspath(os.path.dirname(__file__))
-root = curPath[:curPath.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
-
-sysConf = read_conf_yaml(root + os.path.sep + 'config/web_config.yaml')
 
 
 def format_email(send_email):
