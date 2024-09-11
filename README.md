@@ -69,3 +69,9 @@
 - 本程序是通过 selenium 来实现的价格监控，没有逆向淘宝的api，所以淘宝的ui的xpath可能会有变动
 
 以上问题会在下一个版本解决
+
+
+
+## 免责声明
+
+本项目仅做学习用，请勿将`TaobaoProductMonitor`应用到任何可能会违反法律规定和道德约束的工作中,请友善使用`TaobaoProductMonitor`，遵守蜘蛛协议，不要将`TaobaoProductMonitor`用于任何非法用途。如您选择使用`TaobaoProductMonitor`即代表您遵守此协议，作者不承担任何由于您违反此协议带来任何的法律风险和损失，一切后果由您承担。
