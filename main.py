@@ -1,16 +1,21 @@
-import os
+import logging
 import schedule
 import time
 from datetime import datetime
 
-from loguru import logger
-
-from common.logging_log import MyLogger
-from common.read_conf import ReadConfig
+from config.read_conf import ReadConfig
 from task.task import product_monitor_task
 
 rc = ReadConfig()
-log = MyLogger(tag=rc.log_tag, colorful=True, save_pth=rc.log_save_path, existing_counts=rc.log_exist_counts)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(rc.log_save_path),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(rc.log_tag)
 
 
 def job():
