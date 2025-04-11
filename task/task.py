@@ -9,14 +9,16 @@
 @Version 0.0.1
 @Description None
 """
-from database.data import query_monitor_products
-from monitor.taobao import get_product_price
+from service.monitor.taobao import TaobaoMonitor
+from dao.product_dao import ProductDao
 
 
 def product_monitor_task():
-    dicts = query_monitor_products()
+    product_dao = ProductDao()
+    taobao = TaobaoMonitor()
+    dicts = product_dao.query_monitor_products()
     for i in dicts:
-        get_product_price(i)
+        taobao.get_product_price(i)
 
 
 if __name__ == '__main__':
