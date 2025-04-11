@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/database/data.py" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/database/mysql_util.py" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/dao/price_monitor_dao.py" dialect="SQLite" />
+    <file url="file://$PROJECT_DIR$/dao/product_dao.py" dialect="SQLite" />
+    <file url="file://$PROJECT_DIR$/db/init_sqlite.sql" dialect="SQLite" />
   </component>
 </project>
