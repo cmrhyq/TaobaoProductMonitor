@@ -11,24 +11,25 @@
 """
 import os
 
+from domain.entity.product import EmailParams
+from domain.enums.base_enums import SystemEnum
+
 
 class EmailTemplate(object):
-    def __init__(self, template_info):
+    def __init__(self, template_info: EmailParams):
         """
         初始化
-        :param template_info: dict类型 - 模板需要的信息：必须包含的字段有 template_name，其他字段根据模板需要定义
+        :param template_info: EmailParams
         """
-        self.cur_path = os.path.abspath(os.path.dirname(__file__))
-        self.root = self.cur_path[:self.cur_path.find("TaobaoProductMonitor") + len("TaobaoProductMonitor")]
-        self.template_url = "resource/template"
+        self.template_url = "resource\\template"
         self.template_info = template_info
 
-    def read_template(self):
+    def __read_template(self):
         """
         读取模板
         :return:
         """
-        file_path = self.root + os.path.sep + self.template_url + os.path.sep + self.template_info["template_name"]
+        file_path = SystemEnum.PROJECT_BASE_PATH.name_value + os.path.sep + self.template_url + os.path.sep + self.template_info.template_name
         print(file_path)
         with open(file_path, 'r', encoding='utf-8') as f:
             txt = f.read()
@@ -39,12 +40,7 @@ class EmailTemplate(object):
         使用此模板需要包含以下字段：product_name, first_price, now_price, reduction, product_url
         :return:
         """
-        read_template = self.read_template()
-        return read_template.format(self.template_info["product_name"], self.template_info["first_price"],
-                                    self.template_info["now_price"], self.template_info["reduction"], self.template_info["product_url"])
-
-
-if __name__ == '__main__':
-    dist = {"template_name": "price_reduction.html", "product_name": "1", "first_price": "2", "now_price": "3",
-            "reduction": "4", "product_url": "4"}
-    print(EmailTemplate(dist).price_reduction())
+        read_template = self.__read_template()
+        return read_template.format(self.template_info.template_name, self.template_info.first_price,
+                                    self.template_info.new_price, self.template_info.reduction,
+                                    self.template_info.product_url)
