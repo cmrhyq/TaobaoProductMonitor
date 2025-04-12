@@ -12,6 +12,8 @@ import time
 import pyperclip
 
 from telnetlib import EC
+
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common import NoSuchElementException, TimeoutException, InvalidSelectorException
 from selenium.webdriver import ActionChains
@@ -21,6 +23,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from domain.entity.selenium import LocateElementOptions
 from domain.enums.base_enums import LocateElementMethod
+from utils.internet_utils import get_random_pc_ua
 from utils.selenium.selector_utils import identify_selector_type, extract_value_from_selector
 
 from selenium import webdriver
@@ -30,27 +33,50 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class SeleniumService(object):
-    def __init__(self, is_headless=False):
-        self.browser = self.init(is_headless)
+    def __init__(self, is_headless: bool=False, proxy: bool=False):
+        self.browser = self.init(is_headless, proxy)
         self.screen_page_path = f"{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}\\resource\\image"
 
-    def init(self, is_headless=False):
+    def init(self, is_headless=False, proxy: bool=False):
         """
         初始化浏览器驱动。
         :param is_headless: 是否开启无头
+        :param proxy: 是否开始代理
         :return:
         """
         chrome_options = Options()
         if is_headless:
             chrome_options.add_argument('--headless')
+        if proxy:
+            chrome_options.ignore_local_proxy_environment_variables()
+            # 设置代理
+            os.environ['HTTPS_PROXY'] = '127.0.0.1:7890'
+            os.environ['HTTP_PROXY'] = '127.0.0.1:7890'
 
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument(get_random_pc_ua())
+        # 打开开发者模式
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        # 打开浏览器后不关闭
+        chrome_options.add_experimental_option("detach", True)
+        # 禁用Blink功能
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
         service = Service(ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service, options=chrome_options)
         browser.maximize_window()
+
+        # 打开浏览器后在控制台输入：window.navigator.webdriver    看返回是否是undefined-说明浏览器没有识别是selenium打开的浏览器、如果是true说明是被反爬了
+        browser.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+                        Object.defineProperty(navigator, 'webdriver', {
+                            get: () => undefined
+                        })
+                """
+        })
+
         return browser
 
     # 启动页面
@@ -430,3 +456,10 @@ class SeleniumService(object):
         element = self.browser.find_element(selector_type, selector_location)
         child_element_count = len(element.find_elements(selector_type, "./child::*"))
         return child_element_count
+
+    def current_url(self):
+        """
+        获取当前页面的URL。
+        :return:
+        """
+        return self.browser.current_url
