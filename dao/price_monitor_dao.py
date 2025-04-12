@@ -14,7 +14,7 @@ import decimal
 from loguru import logger
 
 from dao.base_dao import BaseDao
-from domain.entity.price import Price
+from domain.entity.price import PriceInfo
 
 
 class PriceMonitorDao(BaseDao):
@@ -32,7 +32,7 @@ class PriceMonitorDao(BaseDao):
         :return: dict<数据条数>
         """
         try:
-            logger.info("====================query_price_count Action")
+            logger.info("query_price_count Action")
             cursor = self.conn.cursor()
             sql = """
             select count(*) as count
@@ -41,21 +41,21 @@ class PriceMonitorDao(BaseDao):
             """ % product_id
             logger.info(sql)
             result = cursor.execute(sql)
-            logger.info("====================query_price_count End")
+            logger.info("query_price_count End")
             for i in result:
                 return i
         except Exception as e:
             logger.error(e)
             return None
 
-    def query_first_price(self, product_id: int):
+    def query_first_price(self, product_id: int) -> PriceInfo:
         """
         根据产品id查询此产品最开始监控的价格
         :param product_id:
         :return: dict
         """
         try:
-            logger.info("====================query_first_price Action")
+            logger.info("query_first_price Action")
             cursor = self.conn.cursor()
             sql = """
             select *
@@ -66,21 +66,21 @@ class PriceMonitorDao(BaseDao):
             """ % product_id
             logger.info(sql)
             result = cursor.execute(sql)
-            logger.info("====================query_first_price End")
+            logger.info("query_first_price End")
             for i in result:
-                return i
+                return PriceInfo.from_dict(i)
         except Exception as e:
             logger.error(e)
             return None
 
-    def insert_price(self, price_info: Price):
+    def insert_price(self, price_info: PriceInfo):
         """
         价格监控表数据插入
         :param price_info: 价格信息
         :return: price_id
         """
         try:
-            logger.info("====================insert_price Action")
+            logger.info("insert_price Action")
             cursor = self.conn.cursor()
             sql = """
             insert into price_change(
@@ -92,7 +92,7 @@ class PriceMonitorDao(BaseDao):
             """ % (price_info.product_id, price_info.price)
             logger.info(sql)
             result = cursor.execute(sql)
-            logger.info("====================insert_price End")
+            logger.info("insert_price End")
             if result.rowcount > 0:
                 logger.info("数据插入成功，受影响行数，" + str(result.rowcount))
                 return result.lastrowid

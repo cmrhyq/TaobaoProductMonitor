@@ -24,13 +24,14 @@ class ProductDao(BaseDao):
     def __init__(self):
         super().__init__()
 
-    def query_monitor_products(self):
+    def query_monitor_products(self) -> list:
         """
         查询需要监控的产品
         :return: dict
         """
         try:
-            logger.info("====================query_monitor_products Action")
+            monitor_products = []
+            logger.info("query_monitor_products Action")
             cursor = self.conn.cursor()
             sql = """
             select *
@@ -39,12 +40,15 @@ class ProductDao(BaseDao):
             """
             logger.info(sql)
             cursor.execute(sql)
-            result = cursor.fetchall()
-            logger.info("====================query_monitor_products End")
-            return result
+            product_list = cursor.fetchall()
+            for item in product_list:
+                item_info = ProductInfo.from_dict(item)
+                monitor_products.append(item_info)
+            logger.info("query_monitor_products End")
+            return monitor_products
         except Exception as e:
             logger.error(e)
-            return None
+            return []
         finally:
             self.conn.close()
 
@@ -55,7 +59,7 @@ class ProductDao(BaseDao):
         :return: 产品id
         """
         try:
-            logger.info("====================insert_products Action")
+            logger.info("insert_products Action")
             cursor = self.conn.cursor()
             sql = """
             insert into products (
@@ -64,12 +68,12 @@ class ProductDao(BaseDao):
             values (
                 1, '%s', '%s', '%s', '%s', '%s'
             )
-            """ % (product.platform, product.product_name, product.product_url, product.product_tk, product.notify_email)
+            """ % (product.platform, product.product_url, product.product_name, product.product_tk, product.notify_email)
 
             logger.info(sql)
             result = cursor.execute(sql)
 
-            logger.info("====================insert_products End")
+            logger.info("insert_products End")
             if result.rowcount > 0:
                 self.conn.commit()
                 logger.info("数据插入成功，受影响行数，" + str(result.rowcount))
@@ -90,7 +94,7 @@ class ProductDao(BaseDao):
         :return:
         """
         try:
-            logger.info("====================update_product_status Action")
+            logger.info("update_product_status Action")
             cursor = self.conn.cursor()
             sql = """
             update products
@@ -99,7 +103,7 @@ class ProductDao(BaseDao):
             """ % (product.monitor_status, product.product_id)
             logger.info(sql)
             result = cursor.execute(sql)
-            logger.info("====================update_product_status End")
+            logger.info("update_product_status End")
             if result.rowcount > 0:
                 self.conn.commit()
                 logger.info("数据插入成功，受影响行数，" + str(result.rowcount))
@@ -115,5 +119,4 @@ class ProductDao(BaseDao):
 
 
 if __name__ == '__main__':
-    print(ProductDao().query_monitor_products)
-    print(ProductDao().insert_products("1", "1", "1", "1", "1"))
+    print(ProductDao().query_monitor_products())
