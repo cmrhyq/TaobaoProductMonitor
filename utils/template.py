@@ -11,7 +11,7 @@
 """
 import os
 
-from domain.entity.product import EmailParams
+from domain.entity.email import EmailParams
 from domain.enums.base_enums import SystemEnum
 
 
