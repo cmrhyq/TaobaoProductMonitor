@@ -4,6 +4,7 @@ import time
 from contextlib import contextmanager
 from loguru import logger
 from common.selenium_service import SeleniumService
+from domain.entity.selenium import SeleniumBase
 from domain.enums.base_enums import SystemEnum
 
 
@@ -19,7 +20,13 @@ class TaobaoCookie(object):
     def _browser_context(self):
         """浏览器上下文管理器"""
         try:
-            self.browser = SeleniumService(proxy=True)
+            self.browser = SeleniumService()
+            self.browser.start_browser(SeleniumBase(
+                is_headless=False,
+                is_cdp=True,
+                is_dev=True,
+                proxy="127.0.0.1:7890"
+            ))
             yield self.browser
         finally:
             if self.browser:
@@ -64,3 +71,9 @@ class TaobaoCookie(object):
                         return cookies
         except Exception as e:
             logger.error(f"获取淘宝cookie失败，错误信息：{e}")
+
+
+if __name__ == '__main__':
+    taobao_cookie = TaobaoCookie()
+    cookie = taobao_cookie.read_cookies()
+    print(cookie)

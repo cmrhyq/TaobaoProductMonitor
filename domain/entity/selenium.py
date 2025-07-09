@@ -6,11 +6,19 @@ from domain.enums.base_enums import LocateElementMethod
 
 
 @dataclass
-class InitOptions(object):
+class SeleniumBase(object):
     """
-    初始化选项
+    is_headless (bool, optional): 是否开启无头模式。默认为 False。
+    is_cdp (bool, optional): 是否使用 Chrome Devtools Protocol。默认为 True。
+    is_dev (bool, optional): 是否启用调试模式。默认为 True。
+    proxy (bool, optional): 代理设置。默认为 None。
+    driver (str, optional): 浏览器驱动的路径。默认为 None。等于None会使用webdriver_manager自动下载驱动
     """
-    headless: bool = False
+    is_headless: bool = False
+    is_cdp: bool = True
+    is_dev: bool = True
+    proxy: str = None
+    driver: str = None
 
 
 @dataclass

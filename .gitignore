@@ -1,0 +1,64 @@
+# 字节码文件和缓存目录
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+# CPython
+*.cpython-*.pyc
+
+# IDE 和编辑器文件
+# PyCharm
+.idea/
+.vscode/
+*.iml
+
+# 操作系统文件
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# 虚拟环境目录
+venv/
+env/
+/Envs/
+/envs/
+# 可以根据你实际使用的虚拟环境名称添加，例如：
+.venv/
+
+# 日志文件
+*.log
+logs/
+
+# 数据库文件
+*.sqlite3
+*.db.sqlite3
+*.db
+
+# 编译和构建产物
+dist/
+build/
+*.egg-info/
+.coverage
+.pytest_cache/
+
+# 依赖管理工具
+# pip
+pip-wheel-metadata/
+# Poetry
+.poetry/
+# Conda
+.conda/
+# rye
+.rye/
+
+# Jupyter Notebook 检查点
+.ipynb_checkpoints/
+
+# 敏感文件和配置（**重要！**）
+# 确保不要提交任何包含 API 密钥、密码或其他敏感信息的配置文件
+# 常见的敏感文件命名示例 (根据你的实际情况调整)
+*.env
+.env.*
+config.ini
+settings.py # 如果包含敏感信息，可以考虑排除或使用环境变量
+credentials.json
+token.json

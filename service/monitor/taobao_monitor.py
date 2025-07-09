@@ -19,6 +19,7 @@ from dao.product_dao import ProductDao
 from domain.entity.email import EmailSender, ProductEmailInfo, EmailParams
 from domain.entity.price import PriceInfo
 from domain.entity.product import ProductInfo, ProductParseResult
+from domain.entity.selenium import SeleniumBase
 from domain.enums.base_enums import MonitorStatus, SystemEnum
 from service.cookie.taobao_cookie import TaobaoCookie
 from utils.common import get_url_params
@@ -40,7 +41,13 @@ class TaobaoMonitor:
     def _browser_context(self):
         """浏览器上下文管理器"""
         try:
-            self.browser = SeleniumService(proxy=True)
+            self.browser = SeleniumService()
+            self.browser.start_browser(SeleniumBase(
+                is_headless=False,
+                is_cdp=True,
+                is_dev=True,
+                proxy="127.0.0.1:7890"
+            ))
             yield self.browser
         finally:
             if self.browser:
@@ -61,7 +68,7 @@ class TaobaoMonitor:
                 product_name=email_info.product_name,
                 first_price=email_info.first_price,
                 new_price=email_info.now_price,
-                reduction=float(email_info.first_price) - email_info.now_price,
+                reduction=Decimal(email_info.first_price) - email_info.now_price,
                 product_url=email_info.product_url
             )
             
@@ -149,19 +156,20 @@ class TaobaoMonitor:
         """
         try:
             with self._browser_context() as browser:
+
                 # 首先登录一遍淘宝，获取cookie
-                self.taobao_cookie.get_cookie()
-                browser.wait_for_time(3)
-                tb_cookies = self.taobao_cookie.read_cookies()
-                # 向当前浏览器会话中添加一个cookie
-                for cookie in tb_cookies:
-                    self.browser.add_cookie({
-                        "domain": ".taobao.com",  # 这是cookie的域名、域名前有一个 . 表示对所有的子域名都有效
-                        "name": cookie,  # cookie名称
-                        "value": tb_cookies[cookie],  # cookie的值
-                        "path": '/',  # 这是cookie的路径。'/'表示该cookie对于域名的所有路径都是有效的
-                        "expires": None  # 这是cookie的过期时间。None表示该cookie没有过期时间，即它是一个会话cookie，当浏览器会话结束时它会被删除
-                    })
+                # self.taobao_cookie.get_cookie()
+                # browser.wait_for_time(3)
+                # tb_cookies = self.taobao_cookie.read_cookies()
+                # # 向当前浏览器会话中添加一个cookie
+                # for cookie in tb_cookies:
+                #     browser.add_cookie({
+                #         "domain": ".taobao.com",  # 这是cookie的域名、域名前有一个 . 表示对所有的子域名都有效
+                #         "name": cookie,  # cookie名称
+                #         "value": tb_cookies[cookie],  # cookie的值
+                #         "path": '/',  # 这是cookie的路径。'/'表示该cookie对于域名的所有路径都是有效的
+                #         "expires": None  # 这是cookie的过期时间。None表示该cookie没有过期时间，即它是一个会话cookie，当浏览器会话结束时它会被删除
+                #     })
 
                 browser.start_page(url)
                 browser.wait_for_time(5)
