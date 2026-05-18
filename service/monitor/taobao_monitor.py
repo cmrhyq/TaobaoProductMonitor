@@ -17,8 +17,8 @@ from data.repository.notification_repo import NotificationRepository
 from domain.entity.email import EmailSender
 from data.models import Product
 from service.monitor.price_fetcher import PriceFetcherService
-from utils.send_email import EmailService
-from utils.template import EmailTemplate
+from utils.email.send_email import EmailService
+from utils.email.template import EmailTemplate
 
 logger = structlog.get_logger(__name__)
 
