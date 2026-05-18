@@ -1,7 +1,7 @@
-import os
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional, TypeVar, Type, Any, Generic, Union
+from pathlib import Path
+from typing import Optional, TypeVar, Type, Any, Generic
 
 T = TypeVar('T', bound='BaseIdNameEnum')
 ID = TypeVar('ID', int, str)
@@ -57,19 +57,10 @@ class BaseIdNameEnum(Enum):
         return super().__eq__(other)
 
 class SystemEnum(BaseIdNameEnum):
-    PROJECT_BASE_PATH = EnumValue(1, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    PROJECT_BASE_PATH = EnumValue(1, str(Path(__file__).resolve().parent.parent))
 
 
 class MonitorStatus(BaseIdNameEnum):
     NOT_STARTED = EnumValue(10, "未开始")
     MONITORING = EnumValue(11, "监控中")
     ENDED = EnumValue(12, "已结束")
-
-
-class LocateElementMethod(BaseIdNameEnum):
-    CLICK = EnumValue(10, "click")
-    INPUT = EnumValue(11, "input")
-
-
-if __name__ == '__main__':
-    print(MonitorStatus.NOT_STARTED.name_value)
