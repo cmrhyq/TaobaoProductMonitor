@@ -24,22 +24,27 @@ class ProductInfo:
     product_url: Optional[str] = None
     product_name: Optional[str] = None
     product_tk: Optional[str] = None
+    item_id: Optional[str] = None
     monitor_status: MonitorStatus = MonitorStatus.NOT_STARTED
     notify_email: Optional[str] = None
-    gma_create: datetime.datetime = field(default_factory=datetime.datetime.now)
-    gma_modified: datetime.datetime = field(default_factory=datetime.datetime.now)
+    initial_price: Optional[float] = None
+    current_price: Optional[float] = None
+    lowest_price: Optional[float] = None
+    last_check_at: Optional[datetime.datetime] = None
+    check_count: int = 0
+    fail_count: int = 0
+    created_at: datetime.datetime = field(default_factory=datetime.datetime.now)
+    updated_at: datetime.datetime = field(default_factory=datetime.datetime.now)
 
     def __post_init__(self):
         """数据初始化后的处理"""
-        # 确保时间字段有值
-        if not self.gma_create:
-            self.gma_create = datetime.datetime.now()
-        if not self.gma_modified:
-            self.gma_modified = self.gma_create
+        if not self.created_at:
+            self.created_at = datetime.datetime.now()
+        if not self.updated_at:
+            self.updated_at = self.created_at
         
-        # 将monitor_status转换为枚举类型
         if isinstance(self.monitor_status, (int, str)):
-            self.monitor_status = MonitorStatus.get_from_id(self.monitor_status)
+            self.monitor_status = MonitorStatus.get_from_id(self.monitor_status) or MonitorStatus.NOT_STARTED
 
     def update_status(self, new_status: MonitorStatus) -> None:
         """
@@ -49,7 +54,7 @@ class ProductInfo:
             new_status: 新的监控状态
         """
         self.monitor_status = new_status
-        self.gma_modified = datetime.datetime.now()
+        self.updated_at = datetime.datetime.now()
 
     def is_valid(self) -> bool:
         """
@@ -79,10 +84,17 @@ class ProductInfo:
             'product_url': self.product_url,
             'product_name': self.product_name,
             'product_tk': self.product_tk,
+            'item_id': self.item_id,
             'monitor_status': self.monitor_status.id if self.monitor_status else None,
             'notify_email': self.notify_email,
-            'gma_create': self.gma_create,
-            'gma_modified': self.gma_modified
+            'initial_price': self.initial_price,
+            'current_price': self.current_price,
+            'lowest_price': self.lowest_price,
+            'last_check_at': self.last_check_at,
+            'check_count': self.check_count,
+            'fail_count': self.fail_count,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
         }
 
     @classmethod
@@ -98,10 +110,13 @@ class ProductInfo:
         """
         if not isinstance(data, dict):
             if isinstance(data, (list, tuple)):
-                # Create a dictionary with available values
-                field_names = ['product_id', 'user_id', 'platform', 'product_url', 'product_name',
-                               'product_tk', 'monitor_status', 'notify_email', 'gma_create',
-                               'gma_modified']
+                field_names = [
+                    'product_id', 'user_id', 'platform', 'product_url', 'product_name',
+                    'product_tk', 'item_id', 'monitor_status', 'notify_email',
+                    'initial_price', 'current_price', 'lowest_price',
+                    'last_check_at', 'check_count', 'fail_count',
+                    'created_at', 'updated_at',
+                ]
                 data_dict = {}
                 for i, value in enumerate(data):
                     if i < len(field_names):
@@ -110,4 +125,12 @@ class ProductInfo:
             else:
                 raise ValueError("Input must be a dictionary or a sequence")
 
-        return cls(**data)
+        known_fields = {
+            'product_id', 'user_id', 'platform', 'product_url', 'product_name',
+            'product_tk', 'item_id', 'monitor_status', 'notify_email',
+            'initial_price', 'current_price', 'lowest_price',
+            'last_check_at', 'check_count', 'fail_count',
+            'created_at', 'updated_at',
+        }
+        filtered = {k: v for k, v in data.items() if k in known_fields}
+        return cls(**filtered)
