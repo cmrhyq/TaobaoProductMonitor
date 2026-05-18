@@ -1,25 +1,47 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
 """
-@File task.py
-@Contact cmrhyq@163.com
-@License (C)Copyright 2022-2025, AlanHuang
-@Modify Time 2024/4/26 上午12:41
-@Author Alan Huang
-@Version 0.0.1
-@Description None
+Task scheduling and execution.
 """
+
+import structlog
+
+from data.repository.product_repo import ProductRepository
 from service.monitor.taobao_monitor import TaobaoMonitor
-from dao.product_dao import ProductDao
+
+logger = structlog.get_logger(__name__)
 
 
 def product_monitor_task():
-    product_dao = ProductDao()
-    taobao = TaobaoMonitor()
-    list_product_info = product_dao.query_monitor_products()
-    for product_info in list_product_info:
-        taobao.main(product_info)
+    """Execute a full monitoring cycle for all active products."""
+    product_repo = ProductRepository()
+    monitor = TaobaoMonitor()
+
+    products = product_repo.query_monitor_products()
+    logger.info("Monitor task started", product_count=len(products))
+
+    success_count = 0
+    fail_count = 0
+
+    for product in products:
+        try:
+            if monitor.monitor_product(product):
+                success_count += 1
+            else:
+                fail_count += 1
+        except Exception as exc:
+            fail_count += 1
+            logger.error(
+                "Product monitor failed",
+                product_id=product.product_id,
+                error=str(exc),
+            )
+
+    logger.info(
+        "Monitor task completed",
+        success=success_count,
+        failed=fail_count,
+        total=len(products),
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     product_monitor_task()
