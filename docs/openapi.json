@@ -1,0 +1,410 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TaobaoProductMonitor API",
+    "description": "淘宝商品价格监控系统 REST API。支持商品管理、价格监控触发和健康检查。",
+    "version": "2.0.0",
+    "contact": {
+      "name": "TaobaoProductMonitor",
+      "url": "https://github.com/cmrhyq/TaobaoProductMonitor"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "本地开发环境"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "健康检查",
+        "description": "检查服务是否正常运行。",
+        "operationId": "health_check",
+        "responses": {
+          "200": {
+            "description": "服务正常",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "获取所有监控商品",
+        "description": "返回系统中所有商品的列表，包含当前价格和监控状态。",
+        "operationId": "list_products",
+        "responses": {
+          "200": {
+            "description": "商品列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "添加监控商品",
+        "description": "通过淘宝分享文本或直接提供商品信息来添加新的监控商品。提供 share_text 时自动解析商品名称和链接；否则需提供 product_url 和 product_name。",
+        "operationId": "create_product",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductCreate"
+              },
+              "examples": {
+                "share_text": {
+                  "summary": "通过淘宝分享文本添加",
+                  "value": {
+                    "share_text": "【淘宝】「优衣库女装连衣裙」 https://m.tb.cn/h.xxxxx?tk=XXXX",
+                    "notify_email": "user@example.com"
+                  }
+                },
+                "direct": {
+                  "summary": "直接提供商品信息",
+                  "value": {
+                    "product_url": "https://m.tb.cn/h.xxxxx",
+                    "product_name": "优衣库女装连衣裙",
+                    "notify_email": "user@example.com",
+                    "platform": "淘宝"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "商品添加成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "parse_failed": {
+                    "value": { "detail": "Failed to parse share text" }
+                  },
+                  "missing_fields": {
+                    "value": { "detail": "product_url and product_name required if share_text not provided" }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "获取单个商品详情",
+        "description": "根据商品 ID 获取商品的详细信息。",
+        "operationId": "get_product",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "商品 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品详情",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "商品不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "删除监控商品",
+        "description": "根据商品 ID 删除监控商品及其关联数据。",
+        "operationId": "delete_product",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "商品 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "商品不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/monitor/trigger": {
+      "post": {
+        "tags": ["Monitor"],
+        "summary": "手动触发监控",
+        "description": "在后台线程中立即触发一轮完整的价格监控周期。监控任务异步执行，接口立即返回。",
+        "operationId": "trigger_monitor",
+        "responses": {
+          "200": {
+            "description": "监控任务已触发",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriggerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "service": {
+            "type": "string",
+            "example": "TaobaoProductMonitor"
+          }
+        },
+        "required": ["status", "service"]
+      },
+      "ProductResponse": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "description": "商品唯一标识",
+            "example": 19
+          },
+          "product_name": {
+            "type": "string",
+            "nullable": true,
+            "description": "商品名称",
+            "example": "优衣库女装麻混纺吊带连衣裙"
+          },
+          "product_url": {
+            "type": "string",
+            "nullable": true,
+            "description": "商品链接",
+            "example": "https://m.tb.cn/h.5zxyK10h65Gy9AU"
+          },
+          "platform": {
+            "type": "string",
+            "nullable": true,
+            "description": "电商平台",
+            "example": "淘宝"
+          },
+          "monitor_status": {
+            "type": "integer",
+            "description": "监控状态：10=未开始, 11=监控中, 12=已结束",
+            "example": 11
+          },
+          "current_price": {
+            "type": "number",
+            "nullable": true,
+            "description": "当前价格",
+            "example": 249.0
+          },
+          "initial_price": {
+            "type": "number",
+            "nullable": true,
+            "description": "首次监控价格",
+            "example": 299.0
+          },
+          "lowest_price": {
+            "type": "number",
+            "nullable": true,
+            "description": "历史最低价",
+            "example": 239.0
+          },
+          "check_count": {
+            "type": "integer",
+            "description": "检查次数",
+            "example": 15
+          },
+          "fail_count": {
+            "type": "integer",
+            "description": "失败次数",
+            "example": 0
+          }
+        },
+        "required": ["product_id", "monitor_status", "check_count", "fail_count"]
+      },
+      "ProductCreate": {
+        "type": "object",
+        "properties": {
+          "share_text": {
+            "type": "string",
+            "nullable": true,
+            "description": "淘宝分享文本（与 product_url+product_name 二选一）"
+          },
+          "product_url": {
+            "type": "string",
+            "nullable": true,
+            "description": "商品链接（无 share_text 时必填）"
+          },
+          "product_name": {
+            "type": "string",
+            "nullable": true,
+            "description": "商品名称（无 share_text 时必填）"
+          },
+          "notify_email": {
+            "type": "string",
+            "description": "降价通知邮箱"
+          },
+          "platform": {
+            "type": "string",
+            "default": "淘宝",
+            "description": "电商平台"
+          }
+        },
+        "required": ["notify_email"]
+      },
+      "ProductCreateResponse": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "description": "新建商品 ID",
+            "example": 21
+          },
+          "message": {
+            "type": "string",
+            "example": "Product added successfully"
+          }
+        },
+        "required": ["product_id", "message"]
+      },
+      "TriggerResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Monitor cycle triggered"
+          },
+          "status": {
+            "type": "string",
+            "example": "running"
+          }
+        },
+        "required": ["message", "status"]
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Product deleted"
+          }
+        },
+        "required": ["message"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "错误详情"
+          }
+        },
+        "required": ["detail"]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Health",
+      "description": "服务健康检查"
+    },
+    {
+      "name": "Products",
+      "description": "商品管理：添加、查询、删除监控商品"
+    },
+    {
+      "name": "Monitor",
+      "description": "监控控制：手动触发价格检查"
+    }
+  ]
+}
