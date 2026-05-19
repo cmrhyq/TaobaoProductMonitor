@@ -101,7 +101,24 @@ cp .env.example .env
    - 淘宝可能周期性更换该值，如果价格获取持续失败可尝试重新抓取
    - 即使 H5 API 失效，系统会自动降级到 Playwright 浏览器抓取
 
-### 4. 启动方式
+### 4. 初始化数据库
+
+首次运行时 SQLAlchemy 会自动创建所有表结构，通常无需手动操作。如需手动初始化或重置 SQLite 数据库：
+
+```bash
+# 自动初始化（推荐）：首次执行任意 CLI 命令即可
+python cli.py product list
+
+# 手动初始化：使用 SQL 脚本
+sqlite3 db/product_monitor.db < db/init_sqlite.sql
+
+# 从 v1 迁移到 v2
+sqlite3 db/product_monitor.db < db/migration_v2.sql
+```
+
+数据库文件默认路径为 `db/product_monitor.db`，可通过 `.env` 中的 `DB_SQLITE_PATH` 修改。
+
+### 5. 启动方式
 
 CLI 模式（推荐），立即执行一轮监控
 ```bash
