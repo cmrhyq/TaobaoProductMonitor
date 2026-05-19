@@ -86,8 +86,13 @@ class PriceFetcherService:
                 error=result.error_message,
             )
         
+        # Use mobile product URL for Playwright when item_id is available
+        playwright_url = product_url
+        if item_id:
+            playwright_url = f"https://h5.m.taobao.com/awp/core/detail.htm?id={item_id}"
+        
         # Fallback to Playwright
-        return self._try_playwright(product_url)
+        return self._try_playwright(playwright_url)
     
     def _can_extract_item_id(self, url: str) -> bool:
         """Check if we can potentially extract an item ID from the URL."""
@@ -164,3 +169,9 @@ class PriceFetcherService:
         Useful for storing the ID for faster future lookups.
         """
         return self._h5_api.extract_item_id_from_url(product_url)
+
+    def resolve_short_link(self, product_url: str) -> dict:
+        """
+        Resolve a short link and extract all available info (item_id, price).
+        """
+        return self._h5_api.resolve_short_link(product_url)

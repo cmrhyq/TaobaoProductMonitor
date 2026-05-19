@@ -16,7 +16,7 @@ from data.repository.rule_repo import RuleRepository
 from data.repository.notification_repo import NotificationRepository
 from domain.entity.email import EmailSender
 from data.models import Product
-from service.monitor.price_fetcher import PriceFetcherService
+from service.monitor.price_fetcher import PriceFetcherService, PriceFetchResult, FetchMethod
 from utils.email.send_email import EmailService
 from utils.email.template import EmailTemplate
 
@@ -58,11 +58,14 @@ class TaobaoMonitor:
         log = logger.bind(product_id=product.product_id, product_name=product.product_name)
         log.info("Starting product monitor cycle")
 
+        share_price = None
         if not product.item_id:
-            item_id = self._price_fetcher.resolve_item_id(product.product_url)
+            link_info = self._price_fetcher.resolve_short_link(product.product_url)
+            item_id = link_info.get("item_id")
             if item_id:
                 self._product_repo.update_item_id(product.product_id, item_id)
                 product.item_id = item_id
+            share_price = link_info.get("price")
 
         result = self._price_fetcher.fetch_price(
             product_url=product.product_url,
@@ -70,9 +73,21 @@ class TaobaoMonitor:
         )
 
         if not result.success or result.price is None:
-            log.warning("Price fetch failed", method=result.method.value, error=result.error_message)
-            self._product_repo.increment_fail_count(product.product_id)
-            return False
+            if not share_price and ("tb.cn" in product.product_url):
+                link_info = self._price_fetcher.resolve_short_link(product.product_url)
+                share_price = link_info.get("price")
+            if share_price:
+                from decimal import Decimal as _Decimal
+                log.info("Using share price from short link", price=share_price)
+                result = PriceFetchResult(
+                    price=_Decimal(share_price),
+                    method=FetchMethod.API,
+                    success=True,
+                )
+            else:
+                log.warning("Price fetch failed", method=result.method.value, error=result.error_message)
+                self._product_repo.increment_fail_count(product.product_id)
+                return False
 
         current_price = result.price
         log.info("Price fetched", price=str(current_price), method=result.method.value)

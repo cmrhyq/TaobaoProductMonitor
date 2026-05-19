@@ -79,10 +79,11 @@ class PlaywrightPriceFetcher:
             try:
                 context = await browser.new_context(
                     user_agent=(
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                        "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) "
+                        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                        "Version/16.0 Mobile/15E148 Safari/604.1"
                     ),
-                    viewport={"width": 1920, "height": 1080},
+                    viewport={"width": 375, "height": 812},
                 )
                 
                 # Stealth: hide webdriver property
@@ -94,8 +95,8 @@ class PlaywrightPriceFetcher:
                 page.set_default_timeout(self._timeout)
                 
                 logger.info("Navigating to product page", url=url)
-                await page.goto(url, wait_until="domcontentloaded")
-                await page.wait_for_timeout(3000)
+                await page.goto(url, wait_until="networkidle")
+                await page.wait_for_timeout(8000)
                 
                 price = await self._try_extract_price(page)
                 

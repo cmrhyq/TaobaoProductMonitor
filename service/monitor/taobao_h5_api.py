@@ -1,15 +1,14 @@
 """
 Taobao H5 API client for fetching product prices.
-Reverse-engineers the mtop.taobao.detail.getdetail/6.0 interface.
+Uses JSONP-based mtop API (no cookie/sign required) and mobile page scraping.
 """
 
-import hashlib
 import json
 import re
 import time
 from decimal import Decimal
 from typing import Optional
-from urllib.parse import quote
+from urllib.parse import urlparse, parse_qs
 
 import httpx
 import structlog
@@ -21,19 +20,51 @@ API_NAME = "mtop.taobao.detail.getdetail"
 API_VERSION = "6.0"
 DEFAULT_APP_KEY = "12574478"
 
+DESKTOP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/125.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    "Connection": "keep-alive",
+}
+
+MOBILE_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) "
+        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+        "Version/16.0 Mobile/15E148 Safari/604.1"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-CN,zh;q=0.9",
+}
+
+PRICE_PATTERNS = [
+    r'"price"\s*:\s*"([\d.]+)"',
+    r'"priceText"\s*:\s*"([\d.]+)"',
+    r'"originPrice"\s*:\s*"([\d.]+)"',
+    r'"promotionPrice"\s*:\s*"([\d.]+)"',
+    r'data-price="([\d.]+)"',
+    r'"reservePrice"\s*:\s*"([\d.]+)"',
+]
+
 
 class TaobaoH5Api:
     """
-    Taobao H5 API client using mtop interface.
+    Taobao H5 API client.
 
-    Handles cookie lifecycle, sign generation, and price extraction.
+    Strategy:
+    1. JSONP-based mtop API call (no cookie/sign needed)
+    2. Mobile page scraping as fallback
     """
 
     def __init__(
         self,
         app_key: str = DEFAULT_APP_KEY,
         proxy_url: Optional[str] = None,
-        timeout: int = 10,
+        timeout: int = 15,
         max_retries: int = 3,
         request_interval: float = 3.0,
     ):
@@ -42,21 +73,7 @@ class TaobaoH5Api:
         self._timeout = timeout
         self._max_retries = max_retries
         self._request_interval = request_interval
-        self._cookies: dict = {}
-        self._token: Optional[str] = None
         self._last_request_time: float = 0.0
-
-    def _generate_sign(self, token: str, timestamp: str, data: str) -> str:
-        """
-        Generate mtop sign parameter.
-        sign = MD5(token & t & appKey & data)
-        """
-        sign_str = "&".join([token, timestamp, self._app_key, data])
-        return hashlib.md5(sign_str.encode("utf-8")).hexdigest()
-
-    def _extract_token_from_cookie(self, cookie_value: str) -> str:
-        """Extract token from _m_h5_tk cookie value (part before first underscore)."""
-        return cookie_value.split("_")[0]
 
     def _wait_for_interval(self) -> None:
         """Respect request interval to avoid rate limiting."""
@@ -64,78 +81,97 @@ class TaobaoH5Api:
         if elapsed < self._request_interval:
             time.sleep(self._request_interval - elapsed)
 
-    def _init_cookies(self, client: httpx.Client) -> bool:
-        """
-        Initialize cookies by making a preliminary request to get _m_h5_tk.
-
-        Returns:
-            True if cookies were successfully obtained
-        """
-        try:
-            init_url = "https://h5api.m.taobao.com/h5/mtop.common.getTimestamp/1.0/"
-            response = client.get(init_url, params={"api": "mtop.common.getTimestamp"})
-
-            m_h5_tk = None
-            for cookie_name, cookie_value in response.cookies.items():
-                self._cookies[cookie_name] = cookie_value
-                if cookie_name == "_m_h5_tk":
-                    m_h5_tk = cookie_value
-
-            if m_h5_tk:
-                self._token = self._extract_token_from_cookie(m_h5_tk)
-                logger.info("H5 API cookies initialized", token_prefix=self._token[:8])
-                return True
-
-            logger.warning("Failed to obtain _m_h5_tk cookie from init request")
-            return False
-        except Exception as exc:
-            logger.error("Cookie initialization failed", error=str(exc))
-            return False
-
-    def _build_request_params(self, item_id: str) -> Optional[dict]:
-        """Build the full request parameters with sign."""
-        data = json.dumps({"itemNumId": str(item_id)}, separators=(",", ":"))
-        timestamp = str(int(time.time() * 1000))
-
-        if not self._token:
-            logger.error("No token available for sign generation")
-            return None
-
-        sign = self._generate_sign(self._token, timestamp, data)
-
+    def _fetch_via_jsonp_api(self, item_id: str) -> Optional[Decimal]:
+        """Fetch price via JSONP-based H5 API (no cookie/token required)."""
+        api_url = f"{MTOP_BASE_URL}/{API_NAME}/{API_VERSION}/"
         params = {
-            "jsv": "2.7.2",
-            "appKey": self._app_key,
-            "t": timestamp,
-            "sign": sign,
             "api": API_NAME,
             "v": API_VERSION,
-            "type": "originaljson",
-            "timeout": "10000",
-            "dataType": "json",
-            "data": data,
+            "ttid": "2022@taobao_liteAndroid_9.33.0",
+            "type": "jsonp",
+            "dataType": "jsonp",
+            "data": json.dumps({"itemNumId": item_id}),
         }
-        return params
+        headers = {
+            **DESKTOP_HEADERS,
+            "Referer": f"https://h5.m.taobao.com/awp/core/detail.htm?id={item_id}",
+        }
+
+        try:
+            with httpx.Client(
+                timeout=self._timeout,
+                proxy=self._proxy_url,
+            ) as client:
+                response = client.get(api_url, params=params, headers=headers)
+                text = response.text
+
+                json_match = re.search(r"mtopjsonp\d*\((.+)\)", text)
+                if json_match:
+                    resp_data = json.loads(json_match.group(1))
+                else:
+                    resp_data = json.loads(text)
+
+                ret_codes = resp_data.get("ret", [])
+                if any("SUCCESS" in str(r) for r in ret_codes):
+                    return self._parse_price_from_response(resp_data)
+
+                logger.warning("JSONP API returned non-success", ret=ret_codes)
+                return None
+
+        except (json.JSONDecodeError, httpx.TimeoutException) as exc:
+            logger.warning("JSONP API request failed", error=str(exc))
+            return None
+        except Exception as exc:
+            logger.error("JSONP API unexpected error", error=str(exc))
+            return None
+
+    def _fetch_via_mobile_page(self, item_id: str) -> Optional[Decimal]:
+        """Fetch price by scraping the mobile product page HTML."""
+        mobile_url = f"https://h5.m.taobao.com/awp/core/detail.htm?id={item_id}"
+
+        try:
+            with httpx.Client(
+                timeout=self._timeout,
+                follow_redirects=True,
+                proxy=self._proxy_url,
+            ) as client:
+                response = client.get(mobile_url, headers=MOBILE_HEADERS)
+                html = response.text
+
+                for pattern in PRICE_PATTERNS:
+                    match = re.search(pattern, html)
+                    if match:
+                        price = Decimal(match.group(1))
+                        if Decimal("0.01") <= price <= Decimal("1000000"):
+                            logger.info("Price fetched via mobile page", item_id=item_id, price=str(price))
+                            return price
+
+                logger.warning("No price found in mobile page", item_id=item_id)
+                return None
+
+        except Exception as exc:
+            logger.error("Mobile page fetch failed", error=str(exc))
+            return None
 
     def _parse_price_from_response(self, response_data: dict) -> Optional[Decimal]:
-        """
-        Extract price from mtop API response.
-
-        The response structure varies, common paths:
-        - data.item.price (simple)
-        - data.apiStack[0].value -> JSON string -> price.price
-        - data.price.price.priceText
-        """
+        """Extract price from mtop API response."""
         try:
             data = response_data.get("data", {})
 
-            # Path 1: direct price field
             item = data.get("item", {})
             if "price" in item:
-                price_str = item["price"]
-                return Decimal(str(price_str))
+                return Decimal(str(item["price"]))
 
-            # Path 2: apiStack contains nested JSON
+            price_info = data.get("price", {})
+            if isinstance(price_info, dict):
+                price_obj = price_info.get("price", {})
+                if isinstance(price_obj, dict):
+                    price_text = price_obj.get("priceText", "")
+                    if price_text:
+                        clean_price = re.sub(r"[^\d.]", "", price_text)
+                        if clean_price:
+                            return Decimal(clean_price)
+
             api_stack = data.get("apiStack", [])
             if api_stack:
                 stack_value = api_stack[0].get("value", "")
@@ -144,32 +180,21 @@ class TaobaoH5Api:
                 else:
                     stack_data = stack_value
 
-                price_info = stack_data.get("price", {})
-                if isinstance(price_info, dict):
-                    price_obj = price_info.get("price", {})
-                    if isinstance(price_obj, dict):
-                        price_text = price_obj.get("priceText", "")
+                stack_price_info = stack_data.get("price", {})
+                if isinstance(stack_price_info, dict):
+                    stack_price_obj = stack_price_info.get("price", {})
+                    if isinstance(stack_price_obj, dict):
+                        price_text = stack_price_obj.get("priceText", "")
                         if price_text:
                             clean_price = re.sub(r"[^\d.]", "", price_text)
                             if clean_price:
                                 return Decimal(clean_price)
-                    elif price_info.get("price"):
-                        return Decimal(str(price_info["price"]))
+                    elif stack_price_info.get("price"):
+                        return Decimal(str(stack_price_info["price"]))
 
                 stack_item = stack_data.get("item", {})
                 if "price" in stack_item:
                     return Decimal(str(stack_item["price"]))
-
-            # Path 3: top-level price structure
-            price_info = data.get("price", {})
-            if isinstance(price_info, dict):
-                price_val = price_info.get("price", {})
-                if isinstance(price_val, dict):
-                    price_text = price_val.get("priceText", "")
-                    if price_text:
-                        clean_price = re.sub(r"[^\d.]", "", price_text)
-                        if clean_price:
-                            return Decimal(clean_price)
 
             logger.warning("Could not extract price from response", keys=list(data.keys()))
             return None
@@ -182,102 +207,19 @@ class TaobaoH5Api:
         """
         Fetch current price for a product by its item ID.
 
-        Args:
-            item_id: Taobao numeric item ID
-
-        Returns:
-            Product price as Decimal, or None on failure
+        Strategy:
+        1. JSONP API (fast, no auth)
+        2. Mobile page scraping (fallback)
         """
-        transport = httpx.HTTPTransport(retries=1)
-        proxy_config = {"all://": self._proxy_url} if self._proxy_url else None
+        self._wait_for_interval()
+        self._last_request_time = time.time()
 
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 "
-                "(KHTML, like Gecko) Chrome/120.0.6099.230 Mobile Safari/537.36"
-            ),
-            "Referer": "https://m.taobao.com/",
-            "Accept": "application/json",
-        }
+        price = self._fetch_via_jsonp_api(item_id)
+        if price is not None:
+            return price
 
-        with httpx.Client(
-            headers=headers,
-            timeout=self._timeout,
-            follow_redirects=True,
-            proxies=proxy_config,
-            transport=transport,
-        ) as client:
-            if not self._token:
-                if not self._init_cookies(client):
-                    return None
-
-            for name, value in self._cookies.items():
-                client.cookies.set(name, value, domain=".taobao.com")
-
-            for attempt in range(self._max_retries):
-                self._wait_for_interval()
-                self._last_request_time = time.time()
-
-                params = self._build_request_params(item_id)
-                if not params:
-                    return None
-
-                try:
-                    url = f"{MTOP_BASE_URL}/{API_NAME}/{API_VERSION}/"
-                    response = client.get(url, params=params)
-
-                    for cookie_name, cookie_value in response.cookies.items():
-                        self._cookies[cookie_name] = cookie_value
-                        if cookie_name == "_m_h5_tk":
-                            self._token = self._extract_token_from_cookie(cookie_value)
-
-                    if response.status_code != 200:
-                        logger.warning(
-                            "API returned non-200",
-                            status=response.status_code,
-                            attempt=attempt + 1,
-                        )
-                        self._token = None
-                        self._init_cookies(client)
-                        continue
-
-                    resp_data = response.json()
-
-                    ret_codes = resp_data.get("ret", [])
-                    if any("SUCCESS" in str(r) for r in ret_codes):
-                        price = self._parse_price_from_response(resp_data)
-                        if price is not None:
-                            logger.info(
-                                "Price fetched via H5 API",
-                                item_id=item_id,
-                                price=str(price),
-                            )
-                            return price
-
-                    if any(
-                        "TOKEN_EMPTY" in str(r)
-                        or "SID_INVALID" in str(r)
-                        or "FAIL_SYS_TOKEN" in str(r)
-                        for r in ret_codes
-                    ):
-                        logger.info("Token expired, refreshing", attempt=attempt + 1)
-                        self._token = None
-                        self._init_cookies(client)
-                        continue
-
-                    logger.warning(
-                        "API returned error",
-                        ret=ret_codes,
-                        attempt=attempt + 1,
-                    )
-
-                except httpx.TimeoutException:
-                    logger.warning("API request timeout", attempt=attempt + 1)
-                except Exception as exc:
-                    logger.error("API request failed", error=str(exc), attempt=attempt + 1)
-
-        logger.error("All API attempts exhausted", item_id=item_id)
-        return None
+        time.sleep(1)
+        return self._fetch_via_mobile_page(item_id)
 
     def extract_item_id_from_url(self, url: str) -> Optional[str]:
         """
@@ -286,7 +228,7 @@ class TaobaoH5Api:
         Supports:
         - https://item.taobao.com/item.htm?id=123456
         - https://detail.tmall.com/item.htm?id=123456
-        - Short URLs (need to follow redirect)
+        - Short URLs (need to follow redirect or parse JS page)
         """
         match = re.search(r"[?&]id=(\d+)", url)
         if match:
@@ -294,18 +236,65 @@ class TaobaoH5Api:
 
         if "tb.cn" in url or "m.tb.cn" in url:
             try:
-                proxy_config = {"all://": self._proxy_url} if self._proxy_url else None
                 with httpx.Client(
                     follow_redirects=True,
                     timeout=self._timeout,
-                    proxies=proxy_config,
+                    proxy=self._proxy_url,
+                    headers=DESKTOP_HEADERS,
                 ) as client:
                     response = client.get(url)
                     final_url = str(response.url)
                     match = re.search(r"[?&]id=(\d+)", final_url)
                     if match:
                         return match.group(1)
+                    body_id_match = re.search(r"[?&]id=(\d+)", response.text)
+                    if body_id_match:
+                        return body_id_match.group(1)
             except Exception as exc:
                 logger.warning("Failed to resolve short URL", url=url, error=str(exc))
 
         return None
+
+    def resolve_short_link(self, url: str) -> dict:
+        """
+        Resolve a Taobao short link and extract all available info.
+
+        Returns dict with keys: item_id, price, target_url (any may be None).
+        """
+        result = {}
+        if "tb.cn" not in url and "m.tb.cn" not in url:
+            match = re.search(r"[?&]id=(\d+)", url)
+            if match:
+                result["item_id"] = match.group(1)
+            return result
+
+        try:
+            with httpx.Client(
+                follow_redirects=True,
+                timeout=self._timeout,
+                proxy=self._proxy_url,
+                headers=DESKTOP_HEADERS,
+            ) as client:
+                response = client.get(url)
+                html = response.text
+
+                url_match = re.search(r"var\s+url\s*=\s*['\"](.+?)['\"]", html)
+                if url_match:
+                    target_url = url_match.group(1)
+                    result["target_url"] = target_url
+                    parsed = urlparse(target_url)
+                    params = parse_qs(parsed.query)
+                    if "id" in params:
+                        result["item_id"] = params["id"][0]
+                    if "price" in params:
+                        result["price"] = params["price"][0]
+
+                if "item_id" not in result:
+                    body_id_match = re.search(r"[?&]id=(\d+)", html)
+                    if body_id_match:
+                        result["item_id"] = body_id_match.group(1)
+
+        except Exception as exc:
+            logger.warning("Failed to resolve short URL", url=url, error=str(exc))
+
+        return result
