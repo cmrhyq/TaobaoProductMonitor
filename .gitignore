@@ -33,6 +33,13 @@ logs/
 *.sqlite3
 *.db.sqlite3
 *.db
+# 忽略 SQLite 数据库文件
+db.sqlite3
+db.sqlite3-journal
+*.sqlite
+*.db-journal
+*.db-wal
+*.db-shm
 
 # 编译和构建产物
 dist/
