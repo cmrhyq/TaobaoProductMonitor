@@ -104,6 +104,90 @@ def product_list():
     click.echo(f"\n共 {len(products)} 个商品")
 
 
+@cli.command("probe-price")
+@click.option("--url", "product_url", prompt="请输入商品链接", help="商品链接（支持淘宝短链）")
+@click.option("--no-playwright", is_flag=True, help="跳过 Playwright 通道（不启动浏览器）")
+def probe_price(product_url, no_playwright):
+    """诊断单个商品在三个通道的价格提取结果（排查补贴价问题）"""
+    from config.settings import get_settings
+    from service.monitor.price_fetcher import PriceFetcherService
+    from service.monitor.taobao_h5_api import TaobaoH5Api
+    from service.monitor.playwright_fallback import get_price_sync
+
+    fetcher = PriceFetcherService()
+    item_id = fetcher.resolve_item_id(product_url)
+    if not item_id:
+        item_id = fetcher.resolve_short_link(product_url).get("item_id")
+    if not item_id:
+        click.echo(click.style("无法从链接解析出商品 ID", fg="red"))
+        return
+
+    click.echo(f"item_id: {item_id}\n")
+
+    settings = get_settings()
+    api = TaobaoH5Api(
+        app_key=settings.taobao_api.app_key,
+        proxy_url=settings.get_proxy_url(),
+        timeout=settings.taobao_api.timeout,
+        max_retries=settings.taobao_api.max_retries,
+        request_interval=settings.taobao_api.request_interval,
+    )
+
+    # 通道 1：mtop JSONP API
+    info = api.debug_price_info(item_id)
+    jsonp = info["jsonp"]
+    click.echo("【通道1 mtop JSONP API】")
+    if jsonp.get("success"):
+        _echo_prices(jsonp.get("real"), jsonp.get("original"))
+        click.echo("  价格相关字段:")
+        for path, value in jsonp.get("price_fields", {}).items():
+            click.echo(f"    {path} = {value}")
+    else:
+        click.echo(f"  状态: 失败（{jsonp.get('error') or jsonp.get('ret')}）")
+    click.echo("")
+
+    # 通道 2：移动页正则
+    mobile = info["mobile_page"]
+    click.echo("【通道2 移动页正则】")
+    if mobile.get("success"):
+        _echo_prices(mobile.get("real"), mobile.get("original"))
+    else:
+        click.echo(f"  状态: 失败（{mobile.get('error') or '未匹配到价格'}）")
+    for label in ("base_matches", "promo_matches"):
+        matches = mobile.get(label) or {}
+        if matches:
+            name = "常规价格" if label == "base_matches" else "补贴/促销价"
+            click.echo(f"  {name}原始匹配:")
+            for pattern, values in matches.items():
+                click.echo(f"    {values}  <- {pattern}")
+    click.echo("")
+
+    # 通道 3：Playwright
+    if no_playwright:
+        click.echo("【通道3 Playwright】已跳过（--no-playwright）")
+        return
+    click.echo("【通道3 Playwright】启动浏览器，请稍候…")
+    try:
+        real, original = get_price_sync(
+            f"https://h5.m.taobao.com/awp/core/detail.htm?id={item_id}",
+            headless=settings.playwright.headless,
+            timeout=settings.playwright.timeout,
+            proxy_url=settings.get_proxy_url(),
+        )
+        if real is not None:
+            _echo_prices(str(real), str(original) if original is not None else None)
+        else:
+            click.echo("  状态: 失败（页面未提取到价格）")
+    except Exception as exc:
+        click.echo(f"  状态: 失败（{exc}）")
+
+
+def _echo_prices(real, original):
+    real_s = f"¥{real}" if real not in (None, "") else "未获取到"
+    original_s = f"¥{original}" if original not in (None, "") else "-"
+    click.echo(f"  到手价: {real_s}   优惠前价格: {original_s}")
+
+
 @cli.command()
 @click.option("--host", default="0.0.0.0", help="监听地址")
 @click.option("--port", default=8000, type=int, help="监听端口")
