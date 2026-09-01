@@ -5,6 +5,8 @@
 ## 功能特性
 
 - **双重价格获取策略**：优先使用淘宝 H5 API，失败时自动降级为 Playwright 浏览器抓取
+- **补贴价/到手价识别**：自动提取补贴、促销后的真实到手价，与优惠前挂牌价双轨记录（issue #5）
+- **价格诊断命令**：`probe-price` 逐通道打印价格提取明细，便于排查抓取问题
 - **灵活的监控规则**：支持绝对降价、百分比降幅、目标价格等多种规则
 - **结构化日志**：使用 structlog 输出 JSON（生产）/ 彩色文本（开发）日志
 - **多数据库支持**：SQLAlchemy ORM，同时支持 SQLite（默认）和 MySQL
@@ -30,7 +32,8 @@ TaobaoProductMonitor/
 ├── db/
 │   ├── init_sqlite.sql        # SQLite 建表脚本
 │   ├── init_mysql.sql         # MySQL 建表脚本
-│   └── migration_v2.sql       # v1 → v2 迁移脚本
+│   ├── migration_v2.sql       # v1 → v2 迁移脚本
+│   └── migration_v3.sql       # v2 → v3 迁移脚本（price_history.original_price）
 ├── domain/
 │   ├── entity/                # 数据实体
 │   └── enums/                 # 枚举定义
@@ -50,7 +53,9 @@ TaobaoProductMonitor/
 │   └── template.py            # Jinja2 模板渲染
 ├── cli.py                     # CLI 入口（click）
 ├── main.py                    # 向后兼容入口
+├── tests/                     # 单元测试（pytest）
 ├── requirements.txt           # Python 依赖
+├── requirements-dev.txt       # 开发依赖
 ├── .env.example               # 环境变量模板
 └── README.md
 ```
@@ -140,6 +145,11 @@ python cli.py product add
 python cli.py product list
 ```
 
+诊断价格提取（排查补贴价/到手价抓取问题）
+```bash
+python cli.py probe-price --url "商品链接"
+```
+
 启动 Web API 服务
 ```bash
 python cli.py server
@@ -164,21 +174,47 @@ python main.py
 
 ## 价格获取策略
 
+### 双价格语义
+
+淘宝商品页面通常同时存在「优惠前价格」和「补贴/促销后价格」。本项目采用双价格语义：
+
+- **到手价（price）**：检测到补贴/促销价（`promotionPrice`、`promoPrice`、`skuPromoPrice`、`extraPrices` 等字段）时取其最低值，否则取页面展示价。降价监控、规则比较均基于到手价
+- **优惠前价格（original_price）**：仅在检测到真实优惠差价时记录（`price_history.original_price` 列），降价邮件中会以「优惠前价格 → 到手价（补贴后）」的样式展示
+
+### 提取链路
+
 ```
 ┌─────────────────┐
 │  PriceFetcher   │
 └────────┬────────┘
          │
     ┌────▼────┐     成功
-    │ H5 API  │──────────▶ 返回价格
+    │ H5 API  │──────────▶ 返回 (到手价, 优惠前价格)
     └────┬────┘
          │ 失败
     ┌────▼────────┐  成功
-    │ Playwright  │──────────▶ 返回价格
+    │ Playwright  │──────────▶ 返回 (到手价, 优惠前价格)
     └────┬────────┘
          │ 失败
          ▼
     返回获取失败
+```
+
+### 价格诊断
+
+当某个商品抓取不到价格或补贴价时，使用诊断命令逐通道查看提取明细：
+
+```bash
+python cli.py probe-price --url "https://item.taobao.com/item.htm?id=xxxx"
+```
+
+输出内容包括：mtop JSONP API 解析结果与响应中的价格相关字段、移动页正则的原始匹配、Playwright 页面提取结果。淘宝字段结构变更时，可依据此输出快速定位问题。
+
+### 运行测试
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests/
 ```
 
 ## 技术栈

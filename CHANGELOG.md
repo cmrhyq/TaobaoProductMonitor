@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.1] - 2026-09-02
+
+### Bug Fixes
+
+- **补贴后价格无法获取（issue #5）**：重写价格提取为双价格通道——
+  - mtop JSONP API：解析 `promotionPrice`/`promoPrice`/`extraPrices`/`skuCore.sku2info` 等补贴价字段（此前 `data.item.price` 挂牌价最先命中即返回，促销价字段从未进入结构化解析）
+  - 移动页/整页正则：`promotionPrice`/`skuPromoPrice` 等模式与常规价格分开扫描，检测到补贴价时优先生效（此前 `promotionPrice` 排在常规 `price` 之后，首次命中循环永远轮不到）
+  - Playwright：新增 `PROMO_SELECTORS`（`tm-promo-price` 等），促销价先于挂牌价提取（此前 `span.tm-promo-price` 排在所有选择器最后）
+  - 字符串价格值容忍货币符号前缀（`"¥299.00"` 此前无法匹配正则）
+
+### New Features
+
+- `price_history` 表新增 `original_price` 列记录优惠前挂牌价；旧库由 `init_db()` 自动迁移，MySQL 手动脚本见 `db/migration_v3.sql`
+- 降价邮件新增「优惠前价格 → 到手价（补贴后）」展示（检测到补贴价时）
+- 新增 `python cli.py probe-price` 价格诊断命令：逐通道打印到手价/优惠前价格及响应中的原始价格字段，便于排查抓取问题
+- 新增单元测试 `tests/test_price_parsing.py`（22 个用例）与 `requirements-dev.txt`
+
 ## [2.0.0] - 2026-05-19
 
 ### Breaking Changes
