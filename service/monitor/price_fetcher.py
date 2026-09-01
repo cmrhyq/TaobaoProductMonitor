@@ -29,6 +29,9 @@ class PriceFetchResult:
     price: Optional[Decimal]
     method: FetchMethod
     success: bool
+    # Listed price before discounts; set only when a subsidy/promo price
+    # was detected and differs from `price`.
+    original_price: Optional[Decimal] = None
     error_message: Optional[str] = None
 
 
@@ -112,11 +115,12 @@ class PriceFetcherService:
                     error_message="Could not extract item_id from URL",
                 )
             
-            price = self._h5_api.get_product_price(item_id)
-            
-            if price is not None:
+            real, original = self._h5_api.get_product_prices(item_id)
+
+            if real is not None:
                 return PriceFetchResult(
-                    price=price,
+                    price=real,
+                    original_price=original,
                     method=FetchMethod.API,
                     success=True,
                 )
@@ -139,11 +143,12 @@ class PriceFetcherService:
     def _try_playwright(self, product_url: str) -> PriceFetchResult:
         """Attempt to fetch price via Playwright."""
         try:
-            price = get_price_sync(product_url, **self._playwright_kwargs)
-            
-            if price is not None:
+            real, original = get_price_sync(product_url, **self._playwright_kwargs)
+
+            if real is not None:
                 return PriceFetchResult(
-                    price=price,
+                    price=real,
+                    original_price=original,
                     method=FetchMethod.PLAYWRIGHT,
                     success=True,
                 )
