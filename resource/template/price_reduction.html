@@ -35,7 +35,7 @@
                                     <td style="padding: 20px 24px; border-bottom: 1px dashed #e0ddd8;">
                                         <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
-                                                <td style="font-size: 13px; color: #888; width: 72px;">监控价</td>
+                                                <td style="font-size: 13px; color: #888; width: 72px;">{% if promo_detected %}优惠前价格{% else %}监控价{% endif %}</td>
                                                 <td style="font-size: 18px; color: #999; text-decoration: line-through; text-align: right;">
                                                     ¥{{ original_price | currency }}
                                                 </td>
@@ -47,7 +47,7 @@
                                     <td style="padding: 20px 24px; border-bottom: 1px dashed #e0ddd8;">
                                         <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
-                                                <td style="font-size: 13px; color: #888; width: 72px;">当前价</td>
+                                                <td style="font-size: 13px; color: #888; width: 72px;">{% if promo_detected %}到手价（补贴后）{% else %}当前价{% endif %}</td>
                                                 <td style="font-size: 24px; color: #ff5000; font-weight: 700; text-align: right;">
                                                     ¥{{ current_price | currency }}
                                                 </td>

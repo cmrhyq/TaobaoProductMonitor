@@ -90,18 +90,24 @@ class TaobaoMonitor:
                 return False
 
         current_price = result.price
-        log.info("Price fetched", price=str(current_price), method=result.method.value)
+        log.info(
+            "Price fetched",
+            price=str(current_price),
+            original=str(result.original_price) if result.original_price else None,
+            method=result.method.value,
+        )
 
         self._price_repo.insert_price(
             product_id=product.product_id,
             price=current_price,
             fetch_method=result.method.value,
+            original_price=result.original_price,
         )
 
         if product.monitor_status == MONITOR_STATUS_NOT_STARTED:
             return self._handle_first_monitor(product, current_price)
 
-        return self._evaluate_rules(product, current_price)
+        return self._evaluate_rules(product, current_price, original_price=result.original_price)
 
     def _handle_first_monitor(self, product: Product, price: Decimal) -> bool:
         """Handle first price recording for a new product."""
@@ -115,7 +121,7 @@ class TaobaoMonitor:
         logger.info("First monitor recorded", product_id=product.product_id, initial_price=str(price))
         return True
 
-    def _evaluate_rules(self, product: Product, current_price: Decimal) -> bool:
+    def _evaluate_rules(self, product: Product, current_price: Decimal, original_price: Optional[Decimal] = None) -> bool:
         """Evaluate all active rules for price changes."""
         rules = self._rule_repo.get_active_rules(product.product_id)
         if not rules:
@@ -136,7 +142,7 @@ class TaobaoMonitor:
         for rule in rules:
             if self._check_rule_triggered(rule, initial_price, current_price):
                 triggered = True
-                self._send_notification(product, rule, initial_price, current_price)
+                self._send_notification(product, rule, initial_price, current_price, original_price=original_price)
 
         if triggered:
             self._product_repo.update_product_status(product.product_id, MONITOR_STATUS_ENDED)
@@ -165,19 +171,27 @@ class TaobaoMonitor:
 
     def _send_notification(
         self, product: Product, rule: dict,
-        initial_price: Decimal, current_price: Decimal
+        initial_price: Decimal, current_price: Decimal,
+        original_price: Optional[Decimal] = None,
     ) -> bool:
         """Send price drop notification email."""
         try:
             settings = self._settings
             reduction = initial_price - current_price
 
+            # Show the listed price struck through when a subsidy/promo price
+            # is detected; otherwise fall back to the first monitored price.
+            promo_detected = original_price is not None and original_price > current_price
+            listed_price = original_price if promo_detected else initial_price
+
             html_content = self._email_template.price_reduction(
                 product_name=product.product_name,
-                original_price=initial_price,
+                original_price=listed_price,
                 current_price=current_price,
                 reduction=reduction,
                 product_url=product.product_url,
+                initial_price=initial_price,
+                promo_detected=promo_detected,
             )
 
             email_sender = EmailSender(
@@ -196,7 +210,10 @@ class TaobaoMonitor:
                 rule_id=rule.get("rule_id"),
                 notify_type="email",
                 notify_target=product.notify_email,
-                notify_content=f"降价 {reduction} 元，当前价格 {current_price}",
+                notify_content=(
+                    f"降价 {reduction} 元，当前到手价 {current_price}"
+                    + (f"（优惠前 {original_price}）" if promo_detected else "")
+                ),
                 notify_status=1,
             )
 
