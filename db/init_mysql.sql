@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS price_history (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
+    original_price DECIMAL(10, 2) COMMENT '优惠前挂牌价，检测到补贴/促销价时记录',
     fetch_method VARCHAR(32) NOT NULL DEFAULT 'api' COMMENT 'api/playwright/selenium',
     is_valid TINYINT NOT NULL DEFAULT 1,
     recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,

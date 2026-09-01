@@ -17,13 +17,20 @@ logger = structlog.get_logger(__name__)
 class PriceRepository:
     """Data access for price_history table using SQLAlchemy ORM."""
 
-    def insert_price(self, product_id: int, price: Decimal, fetch_method: str = "api") -> Optional[int]:
-        """Record a price observation."""
+    def insert_price(
+        self,
+        product_id: int,
+        price: Decimal,
+        fetch_method: str = "api",
+        original_price: Optional[Decimal] = None,
+    ) -> Optional[int]:
+        """Record a price observation (price = real payable price, original_price = listed before discounts)."""
         try:
             with get_session() as session:
                 record = PriceHistory(
                     product_id=product_id,
                     price=float(price),
+                    original_price=float(original_price) if original_price is not None else None,
                     fetch_method=fetch_method,
                 )
                 session.add(record)
@@ -82,7 +89,12 @@ class PriceRepository:
                 .all()
             )
             return [
-                {"price": r.price, "fetch_method": r.fetch_method, "recorded_at": r.recorded_at}
+                {
+                    "price": r.price,
+                    "original_price": r.original_price,
+                    "fetch_method": r.fetch_method,
+                    "recorded_at": r.recorded_at,
+                }
                 for r in records
             ]
 

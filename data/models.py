@@ -67,6 +67,8 @@ class PriceHistory(Base):
     history_id = Column(Integer, primary_key=True, autoincrement=True)
     product_id = Column(Integer, ForeignKey("products.product_id"), nullable=False)
     price = Column(Float, nullable=False)
+    # Listed price before discounts; set only when a subsidy/promo price was detected
+    original_price = Column(Float, nullable=True)
     fetch_method = Column(String(50), nullable=False, default="api")
     is_valid = Column(Integer, nullable=False, default=1)
     recorded_at = Column(DateTime, default=datetime.now)

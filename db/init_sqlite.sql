@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS price_history (
     history_id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id INTEGER NOT NULL,
     price REAL NOT NULL,
+    original_price REAL,
     fetch_method TEXT NOT NULL DEFAULT 'api',
     is_valid INTEGER NOT NULL DEFAULT 1,
     recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
