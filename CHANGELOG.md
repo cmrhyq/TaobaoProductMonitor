@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Breaking Changes
+
+- 依赖管理迁移到 [uv](https://docs.astral.sh/uv/)：新增 `pyproject.toml`、`uv.lock`、`.python-version`，`requirements.txt` 已移除。安装方式由 `pip install -r requirements.txt` 变更为 `uv sync`，运行命令加 `uv run` 前缀（如 `uv run python cli.py run --once`）
+
+### Dependencies
+
+- 全部运行时依赖迁入 `pyproject.toml [project.dependencies]`，版本约束与原 `requirements.txt` 一致
+- 开发依赖（pytest）迁入 `[dependency-groups] dev`
+- 项目声明为纯应用（`[tool.uv] package = false`），不作为 Python 包构建安装，运行方式不变
+
 ## [2.0.0] - 2026-05-19
 
 ### Breaking Changes
