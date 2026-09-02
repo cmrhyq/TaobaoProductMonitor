@@ -1,0 +1,41 @@
+[project]
+name = "taobao-product-monitor"
+version = "2.0.0"
+description = "淘宝商品价格监控工具 —— 自动追踪商品价格变动，降价时发送邮件通知"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    # HTTP client
+    "httpx>=0.27.0",
+    # Browser automation (fallback)
+    "playwright>=1.44.0",
+    # Database ORM
+    "sqlalchemy>=2.0",
+    "pymysql>=1.1",
+    # Configuration
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-dotenv>=1.0.0",
+    # Structured logging
+    "structlog>=24.1.0",
+    # Template engine
+    "Jinja2>=3.1",
+    # Task scheduling
+    "schedule>=1.2.0",
+    # CLI
+    "click>=8.1",
+    # Web API
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+# 纯应用项目：依赖安装进 .venv，但项目本身不作为包构建/安装，
+# 保持 `python cli.py ...` 的运行方式不变
+[tool.uv]
+package = false

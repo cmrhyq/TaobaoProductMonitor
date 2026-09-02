@@ -50,7 +50,9 @@ TaobaoProductMonitor/
 │   └── template.py            # Jinja2 模板渲染
 ├── cli.py                     # CLI 入口（click）
 ├── main.py                    # 向后兼容入口
-├── requirements.txt           # Python 依赖
+├── pyproject.toml             # 项目元数据与依赖（uv 管理）
+├── uv.lock                    # 锁定版本（提交到仓库）
+├── .python-version            # Python 版本锚定
 ├── .env.example               # 环境变量模板
 └── README.md
 ```
@@ -59,10 +61,23 @@ TaobaoProductMonitor/
 
 ### 1. 安装依赖
 
+本项目使用 [uv](https://docs.astral.sh/uv/) 管理依赖（`pyproject.toml` + `uv.lock`）：
+
 ```bash
-pip install -r requirements.txt
-playwright install chromium
+# 安装 uv（如尚未安装）
+pip install uv
+# 或官方安装脚本：
+#   macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh
+#   Windows:     powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# 安装全部依赖（自动创建 .venv，含 dev 依赖组）
+uv sync
+
+# 安装 Playwright 浏览器
+uv run playwright install chromium
 ```
+
+之后所有命令通过 `uv run` 前缀在项目虚拟环境中执行。
 
 ### 2. 配置环境变量
 
@@ -107,7 +122,7 @@ cp .env.example .env
 
 ```bash
 # 自动初始化（推荐）：首次执行任意 CLI 命令即可
-python cli.py product list
+uv run python cli.py product list
 
 # 手动初始化：使用 SQL 脚本
 sqlite3 db/product_monitor.db < db/init_sqlite.sql
@@ -122,32 +137,32 @@ sqlite3 db/product_monitor.db < db/migration_v2.sql
 
 CLI 模式（推荐），立即执行一轮监控
 ```bash
-python cli.py run --once
+uv run python cli.py run --once
 ```
 
 启动定时调度
 ```bash
-python cli.py run --schedule
+uv run python cli.py run --schedule
 ```
 
 添加监控商品
 ```bash
-python cli.py product add
+uv run python cli.py product add
 ```
 
 查看商品列表
 ```bash
-python cli.py product list
+uv run python cli.py product list
 ```
 
 启动 Web API 服务
 ```bash
-python cli.py server
+uv run python cli.py server
 ```
 
 兼容模式，等同于 run --schedule
 ```bash
-python main.py
+uv run python main.py
 ```
 
 ### 5. Web API
