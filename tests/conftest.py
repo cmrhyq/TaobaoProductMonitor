@@ -1,5 +1,7 @@
-import sys
-from pathlib import Path
+"""pytest 公共配置。
 
-# Ensure the project root is importable when pytest is invoked from anywhere.
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+路径注入已交给 `pyproject.toml` 的 `[tool.pytest.ini_options] pythonpath = ["."]`，
+本文件只保留真正全局的 fixture。
+"""
+
+from __future__ import annotations

@@ -3,11 +3,8 @@ Product repository - data access for the products table.
 """
 
 from datetime import datetime
-from decimal import Decimal
-from typing import Optional
 
 import structlog
-from sqlalchemy.orm import Session
 
 from data.database import get_session
 from data.models import Product
@@ -33,7 +30,7 @@ class ProductRepository:
             session.expunge_all()
             return products
 
-    def get_product_by_id(self, product_id: int) -> Optional[Product]:
+    def get_product_by_id(self, product_id: int) -> Product | None:
         """Get a single product by ID."""
         with get_session() as session:
             product = session.query(Product).filter(Product.product_id == product_id).first()
@@ -54,11 +51,11 @@ class ProductRepository:
         platform: str,
         product_url: str,
         product_name: str,
-        product_tk: Optional[str],
-        item_id: Optional[str],
+        product_tk: str | None,
+        item_id: str | None,
         notify_email: str,
         monitor_status: int = MONITOR_STATUS_NOT_STARTED,
-    ) -> Optional[int]:
+    ) -> int | None:
         """Insert a new product and return its ID."""
         try:
             with get_session() as session:
@@ -100,8 +97,8 @@ class ProductRepository:
         self,
         product_id: int,
         current_price: float,
-        initial_price: Optional[float] = None,
-        lowest_price: Optional[float] = None,
+        initial_price: float | None = None,
+        lowest_price: float | None = None,
     ) -> bool:
         """Update price fields on the product."""
         try:

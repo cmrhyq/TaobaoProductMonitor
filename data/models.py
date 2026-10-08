@@ -5,9 +5,7 @@ Maps to the existing database schema (users, products, price_history, monitor_ru
 
 from datetime import datetime
 
-from sqlalchemy import (
-    Column, Integer, String, Float, Text, DateTime, ForeignKey, Index, Boolean
-)
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 
@@ -78,6 +76,51 @@ class PriceHistory(Base):
     __table_args__ = (
         Index("idx_price_history_product_id", "product_id"),
         Index("idx_price_history_recorded_at", "recorded_at"),
+    )
+
+
+class ProductSnapshot(Base):
+    """Full product detail captured by a single fetch (rich data beyond price).
+
+    price_history stays a narrow time series; the full payload (title / skus /
+    attributes / shop / images) lands here so it can be inspected per fetch.
+    JSON-ish columns use Text with ensure_ascii=False serialization.
+    """
+
+    __tablename__ = "product_snapshot"
+
+    snapshot_id = Column(Integer, primary_key=True, autoincrement=True)
+    product_id = Column(Integer, ForeignKey("products.product_id"), nullable=False)
+    item_id = Column(String(100), nullable=True)
+    title = Column(String(500), nullable=True)
+    subtitle = Column(Text, nullable=True)
+
+    price_current = Column(Float, nullable=True)
+    price_original = Column(Float, nullable=True)
+    price_low = Column(Float, nullable=True)
+    price_high = Column(Float, nullable=True)
+    price_text = Column(String(200), nullable=True)
+    promotions_json = Column(Text, nullable=True)
+
+    stock_total = Column(Integer, nullable=True)
+    sold_text = Column(String(100), nullable=True)
+
+    skus_json = Column(Text, nullable=True)
+    attributes_json = Column(Text, nullable=True)
+    images_json = Column(Text, nullable=True)
+
+    shop_json = Column(Text, nullable=True)
+    # Convenience column for list views (shop name lives inside shop_json too)
+    shop_name = Column(String(200), nullable=True)
+
+    source = Column(String(50), nullable=True)
+    fetched_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.now)
+
+    __table_args__ = (
+        Index("idx_product_snapshot_product_id", "product_id"),
+        Index("idx_product_snapshot_fetched_at", "fetched_at"),
+        Index("idx_product_snapshot_item_id", "item_id"),
     )
 
 

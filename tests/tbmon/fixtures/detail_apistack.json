@@ -1,0 +1,12 @@
+{
+  "ret": ["SUCCESS::调用成功"],
+  "_comment": "合成 fixture：老版 getdetail 6.0 会把详情 JSON 字符串塞进 apiStack[0].value，验证兼容分支",
+  "data": {
+    "apiStack": [
+      {
+        "name": "esi",
+        "value": "{\"item\":{\"itemId\":\"1050906790941\",\"title\":\"MUJI 无印良品 柔软清凉棉多用途靠垫\",\"images\":[\"//img.alicdn.com/a.jpg\"]},\"skuCore\":{\"sku2info\":{\"0\":{\"price\":{\"priceText\":\"522\"},\"quantity\":\"10\"}}},\"price\":{\"price\":{\"priceText\":\"522\"}}}"
+      }
+    ]
+  }
+}

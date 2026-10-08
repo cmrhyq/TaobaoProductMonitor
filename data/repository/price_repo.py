@@ -3,7 +3,6 @@ Price history repository - data access for the price_history table.
 """
 
 from decimal import Decimal
-from typing import Optional
 
 import structlog
 from sqlalchemy import func
@@ -22,8 +21,8 @@ class PriceRepository:
         product_id: int,
         price: Decimal,
         fetch_method: str = "api",
-        original_price: Optional[Decimal] = None,
-    ) -> Optional[int]:
+        original_price: Decimal | None = None,
+    ) -> int | None:
         """Record a price observation (price = real payable price, original_price = listed before discounts)."""
         try:
             with get_session() as session:
@@ -40,7 +39,7 @@ class PriceRepository:
             logger.error("Insert price failed", error=str(e), product_id=product_id)
             return None
 
-    def query_first_price(self, product_id: int) -> Optional[Decimal]:
+    def query_first_price(self, product_id: int) -> Decimal | None:
         """Get the first recorded price for a product."""
         with get_session() as session:
             record = (
@@ -53,7 +52,7 @@ class PriceRepository:
                 return Decimal(str(record.price))
             return None
 
-    def query_latest_price(self, product_id: int) -> Optional[Decimal]:
+    def query_latest_price(self, product_id: int) -> Decimal | None:
         """Get the most recent price for a product."""
         with get_session() as session:
             record = (
@@ -66,7 +65,7 @@ class PriceRepository:
                 return Decimal(str(record.price))
             return None
 
-    def query_lowest_price(self, product_id: int) -> Optional[Decimal]:
+    def query_lowest_price(self, product_id: int) -> Decimal | None:
         """Get the lowest recorded price for a product."""
         with get_session() as session:
             result = (

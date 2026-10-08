@@ -2,7 +2,6 @@
 Monitor rule repository - data access for the monitor_rules table.
 """
 
-from typing import Optional
 
 import structlog
 
@@ -37,9 +36,9 @@ class RuleRepository:
         self,
         product_id: int,
         rule_type: str = "absolute_drop",
-        threshold_value: Optional[float] = None,
-        threshold_percent: Optional[float] = None,
-    ) -> Optional[int]:
+        threshold_value: float | None = None,
+        threshold_percent: float | None = None,
+    ) -> int | None:
         """Create a new monitoring rule."""
         try:
             with get_session() as session:

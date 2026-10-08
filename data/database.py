@@ -2,14 +2,14 @@
 SQLAlchemy engine and session factory.
 """
 
-from sqlalchemy import create_engine, event
-from sqlalchemy.orm import sessionmaker, Session
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 import structlog
+from sqlalchemy import create_engine, event
+from sqlalchemy.orm import Session, sessionmaker
 
-from config.settings import get_settings, PROJECT_ROOT
+from config.settings import PROJECT_ROOT, get_settings
 
 logger = structlog.get_logger(__name__)
 

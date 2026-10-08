@@ -4,7 +4,6 @@ Singleton pattern with custom filters for currency formatting.
 """
 
 from decimal import Decimal
-from typing import Union
 
 import structlog
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -15,7 +14,7 @@ logger = structlog.get_logger(__name__)
 
 TEMPLATE_DIR = PROJECT_ROOT / "resource" / "template"
 
-Numeric = Union[Decimal, float, int, str]
+Numeric = Decimal | float | int | str
 
 
 def _currency_filter(value: Numeric) -> str:

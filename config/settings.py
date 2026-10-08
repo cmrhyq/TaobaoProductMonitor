@@ -1,15 +1,24 @@
 """
 Application settings and configuration management.
 Uses pydantic-settings for environment variable loading and validation.
+
+唯一运行时配置入口，聚合五组配置：
+    app      APP_NAME / LOG_LEVEL / DEBUG
+    db       DB_*
+    mail     MAIL_*
+    monitor  MONITOR_*      （服务内嵌调度器）
+    fetch    TB_*           （抓取参数，由 tbmon.config.Settings 提供）
 """
 
-from pathlib import Path
-from typing import Optional
 from functools import lru_cache
+from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# 抓取参数（TB_ 前缀）的唯一来源；tbmon 包自带 Settings，这里只是组合进主配置
+from tbmon.config import Settings as FetchSettings
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 ENV_FILE_PATH = PROJECT_ROOT / ".env"
@@ -31,41 +40,14 @@ class DatabaseSettings(BaseSettings):
     mysql_database: str = Field(default="product_monitor")
 
 
-class TaobaoApiSettings(BaseSettings):
-    """淘宝 H5 API 配置"""
+class MonitorSettings(BaseSettings):
+    """监控调度配置（服务内嵌调度器）"""
     model_config = SettingsConfigDict(
-        env_prefix="TAOBAO_", env_file=".env", env_file_encoding="utf-8", extra="ignore"
+        env_prefix="MONITOR_", env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
-    app_key: str = Field(default="12574478")
-    request_interval: float = Field(default=3.0, ge=1.0, le=10.0, description="请求间隔秒数")
-    max_retries: int = Field(default=3, ge=1, le=10, description="最大重试次数")
-    timeout: int = Field(default=10, ge=5, le=60, description="请求超时秒数")
-
-
-class ProxySettings(BaseSettings):
-    """代理配置"""
-    model_config = SettingsConfigDict(
-        env_prefix="PROXY_", env_file=".env", env_file_encoding="utf-8", extra="ignore"
-    )
-    enabled: bool = Field(default=False, description="是否启用代理")
-    host: str = Field(default="127.0.0.1")
-    port: int = Field(default=7890)
-
-    @property
-    def url(self) -> Optional[str]:
-        if self.enabled:
-            return f"http://{self.host}:{self.port}"
-        return None
-
-
-class PlaywrightSettings(BaseSettings):
-    """Playwright 回退配置"""
-    model_config = SettingsConfigDict(
-        env_prefix="PLAYWRIGHT_", env_file=".env", env_file_encoding="utf-8", extra="ignore"
-    )
-    headless: bool = Field(default=True, description="是否无头模式")
-    timeout: int = Field(default=30000, description="页面加载超时毫秒")
-    slow_mo: int = Field(default=0, description="操作延迟毫秒")
+    schedule_enabled: bool = Field(default=True, description="是否随服务启动内置定时监控")
+    interval_minutes: int = Field(default=60, ge=1, description="监控轮次间隔（分钟）")
+    run_on_startup: bool = Field(default=False, description="服务启动后是否立即跑一轮")
 
 
 class MailSettings(BaseSettings):
@@ -94,11 +76,15 @@ class Settings:
 
     def __init__(self):
         self.db = DatabaseSettings()
-        self.taobao_api = TaobaoApiSettings()
-        self.proxy = ProxySettings()
-        self.playwright = PlaywrightSettings()
+        self.monitor = MonitorSettings()
         self.mail = MailSettings()
         self.app = AppSettings()
+
+        # 抓取参数统一由 tbmon 提供（TB_ 前缀），此处解析为项目根下的绝对路径，
+        # 避免进程 CWD 变化导致登录态文件找不到。
+        self.fetch = FetchSettings(_env_file=ENV_FILE_PATH)
+        if not self.fetch.storage_state.is_absolute():
+            self.fetch.storage_state = PROJECT_ROOT / self.fetch.storage_state
 
     @property
     def project_root(self) -> Path:
@@ -118,9 +104,6 @@ class Settings:
             f"?charset=utf8mb4"
         )
 
-    def get_proxy_url(self) -> Optional[str]:
-        return self.proxy.url
-
     def get_db_path(self) -> str:
         if self.db.type == "sqlite":
             path = Path(self.db.sqlite_path)
@@ -130,7 +113,7 @@ class Settings:
         return ""
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """Get cached settings singleton instance."""
     return Settings()

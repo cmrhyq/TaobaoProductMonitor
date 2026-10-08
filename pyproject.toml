@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taobao-product-monitor"
+version = "3.0.0"
+description = "淘宝 / 天猫商品价格监控服务：PC 详情页 SSR 抓取 + 定时监控 + 降价邮件通知"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+keywords = ["taobao", "tmall", "price-monitor", "playwright", "fastapi"]
+classifiers = [
+    "Private :: Do Not Upload",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+# 依赖真值（requirements.txt 保持同一份，供 pip install -r 的惯例用法）
+dependencies = [
+    "httpx>=0.27.0",
+    "playwright>=1.44.0",
+    "sqlalchemy>=2.0",
+    "pymysql>=1.1",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-dotenv>=1.0.0",
+    "structlog>=24.1.0",
+    "Jinja2>=3.1",
+    "schedule>=1.2.0",
+    "click>=8.1",
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+include = ["tbmon*", "api*", "config*", "data*", "service*", "task*", "utils*"]
+
+# --------------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# 让 tests/ 与 tbmon/ 都能被导入（不再依赖 conftest 里手工插 sys.path）
+pythonpath = ["."]
+addopts = "-ra"
+
+# ----------------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+# 收敛为「一定有问题」的规则，不做风格洁癖：
+#   F   pyflakes（未使用导入 / 未定义名字等真实缺陷）
+#   E   pycodestyle 错误（缩进、空白、行尾等）
+#   W   pycodestyle 警告
+#   I   isort（导入顺序）
+#   UP  pyupgrade（过时写法）
+#   B   flake8-bugbear（易错写法）
+select = ["F", "E", "W", "I", "UP", "B"]
+ignore = [
+    "E501",   # 行长交给 formatter，中文注释按显示宽度会误报
+    "B008",   # 允许在默认参数里调用工厂（pydantic Field 等惯用法）
+]
+
+[tool.ruff.lint.per-file-ignores]
+# 测试里断言用的长表达与 fixture 命名不必苛求
+"tests/**" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["tbmon", "api", "config", "data", "service", "task", "utils"]

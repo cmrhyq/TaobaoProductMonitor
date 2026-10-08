@@ -3,16 +3,28 @@ Email sending service using SMTP.
 """
 
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from dataclasses import dataclass
 from email.header import Header
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 
 import structlog
 
-from domain.entity.email import EmailSender
-
 logger = structlog.get_logger(__name__)
+
+
+@dataclass
+class EmailSender:
+    """Email sending configuration."""
+
+    email_host: str | None = None
+    email_sender: str | None = None
+    email_receivers: str | None = None
+    email_license: str | None = None
+    email_theme: str | None = None
+    email_content: str | None = None
+    attachments: str | None = None
 
 
 class EmailService:
