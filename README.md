@@ -2,7 +2,7 @@
 
 淘宝 / 天猫商品价格监控服务 —— 定时抓取商品价格与完整商品信息，命中降价规则时发送邮件通知。
 
-**对外的唯一业务入口是 Web API（FastAPI）**：商品管理、价格历史、快照查询、扫码登录、监控触发都在 HTTP 端点里完成。
+**对外的唯一业务入口是 Web API（FastAPI）**：商品管理、价格历史、快照查询、扫码登录、监控触发都在 HTTP 接口里完成。
 定时监控由服务内嵌的调度器驱动，随服务启停。项目不提供任何命令行业务入口。
 
 ---
@@ -151,7 +151,7 @@ cp .env.example .env
 python -m uvicorn api.app:app --host 0.0.0.0 --port 8000
 ```
 
-打开 <http://localhost:8000/docs> 可查看并交互式调用全部端点。
+打开 <http://localhost:8000/docs> 可查看并交互式调用全部API。
 
 > ⚠️ **必须单 worker**（uvicorn 默认即单 worker，**不要加 `--workers`**）。
 > SQLite 单文件、进程内轮次锁、进程内调度器、有头浏览器四者都要求单进程；
@@ -246,7 +246,7 @@ MySQL 请参考 `db/migration_v4.sql`。
 
 ---
 
-## 价格语义（最容易搞错的地方）
+## 价格语义
 
 | 字段 | 含义 |
 |------|------|
@@ -293,7 +293,7 @@ MySQL 请参考 `db/migration_v4.sql`。
 - `needs_human=True`（`AuthRequiredError`）：立即停止并提示重新登录；
 - `RiskControlError`：**刻意不可重试** —— 原地重试不会让风控消失，还会加重封禁，正确动作是更换策略。
 
-### 为什么不用 H5 / 纯 HTTP（不要再往这两个方向投入）
+### 为什么不用 H5 / 纯 HTTP
 
 - **纯 HTTP 直连 mtop 接口**：带正确 `_m_h5_tk` 签名与有效登录 cookie，仍返回
   `RGV587_ERROR::SM::哎哟喂,被挤爆啦`。签名算法没写错，是请求指纹 / 运行环境被判定为不可信。
