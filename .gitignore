@@ -47,6 +47,7 @@ build/
 *.egg-info/
 .coverage
 .pytest_cache/
+.ruff_cache/
 
 # 依赖管理工具
 # pip
@@ -72,3 +73,15 @@ config.ini
 # settings.py # 如果包含敏感信息，可以考虑排除或使用环境变量
 credentials.json
 token.json
+# 工具目录（WorkBuddy / Codex 等本地工具数据，不纳入版本库）
+.workbuddy/
+.zcode/
+
+# 淘宝登录态（含会话凭证，切勿提交）
+taobao_storage_state.json
+
+# 数据库备份（含真实数据，本地保留不入库）
+db/backup/
+
+# 临时排障脚本与原始响应转储（`tbmon fetch --save-raw ./.scratch`）
+.scratch/

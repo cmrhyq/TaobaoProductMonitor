@@ -2,14 +2,14 @@
 SQLAlchemy engine and session factory.
 """
 
-from sqlalchemy import create_engine, event
-from sqlalchemy.orm import sessionmaker, Session
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 import structlog
+from sqlalchemy import create_engine, event
+from sqlalchemy.orm import Session, sessionmaker
 
-from config.settings import get_settings, PROJECT_ROOT
+from config.settings import PROJECT_ROOT, get_settings
 
 logger = structlog.get_logger(__name__)
 
@@ -68,8 +68,44 @@ def get_session() -> Generator[Session, None, None]:
         session.close()
 
 
+def _migrate_schema() -> None:
+    """Lightweight auto-migration for pre-existing databases.
+
+    create_all() only creates missing tables; existing tables need explicit
+    ALTERs to pick up new columns.
+    """
+    from sqlalchemy import text
+
+    with engine.connect() as conn:
+        if engine.url.get_backend_name() == "sqlite":
+            columns = conn.execute(text("PRAGMA table_info(price_history)")).fetchall()
+            if columns and not any(row[1] == "original_price" for row in columns):
+                conn.execute(text("ALTER TABLE price_history ADD COLUMN original_price REAL"))
+                conn.commit()
+                logger.info("Added price_history.original_price column")
+        else:
+            exists = conn.execute(
+                text(
+                    "SELECT COUNT(*) FROM information_schema.COLUMNS "
+                    "WHERE TABLE_SCHEMA = DATABASE() "
+                    "AND TABLE_NAME = 'price_history' "
+                    "AND COLUMN_NAME = 'original_price'"
+                )
+            ).scalar()
+            if not exists:
+                conn.execute(
+                    text(
+                        "ALTER TABLE price_history ADD COLUMN original_price "
+                        "DECIMAL(10, 2) NULL COMMENT '优惠前挂牌价，检测到补贴/促销价时记录'"
+                    )
+                )
+                conn.commit()
+                logger.info("Added price_history.original_price column")
+
+
 def init_db():
     """Create all tables if they don't exist."""
     from data.models import Base
     Base.metadata.create_all(bind=engine)
+    _migrate_schema()
     logger.info("Database tables initialized", url=DATABASE_URL.split("@")[-1] if "@" in DATABASE_URL else DATABASE_URL)

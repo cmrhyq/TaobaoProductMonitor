@@ -1,0 +1,1202 @@
+{
+ "seller": {
+  "sellerNick": "天猫国际海外直购",
+  "shopIcon": "https://img.alicdn.com/imgextra/i4/6000000003216/O1CN01iQgDcv1ZcyWMeVMRD_!!6000000003216-2-shopmanager.png",
+  "shopName": "天猫国际全球探物",
+  "evaluates": [
+   {
+    "score": "4.8 ",
+    "level": "1",
+    "levelText": "高",
+    "title": "宝贝描述",
+    "type": "desc"
+   },
+   {
+    "score": "4.8 ",
+    "level": "1",
+    "levelText": "高",
+    "title": "卖家服务",
+    "type": "serv"
+   },
+   {
+    "score": "4.8 ",
+    "level": "-1",
+    "levelText": "低",
+    "title": "跨境物流",
+    "type": "post"
+   }
+  ],
+  "userId": "4066234693",
+  "creditLevel": "17",
+  "sellerId": "4066234693",
+  "tagIcon": "//gw.alicdn.com/tfs/TB1889mggMPMeJjy1XbXXcwxVXa-113-28.png",
+  "pcShopUrl": "//shop479456214.taobao.com",
+  "creditLevelIcon": "//gw.alicdn.com/tfs/TB1MpufDhjaK1RjSZKzXXXVwXXa-165-45.png",
+  "shopId": "479456214",
+  "sellerType": "B",
+  "encryptUid": "RAzN8HWNgDpTJX75KSyYFuAQSBw4kCebDyyLTeCQmSiiyE7rqM7"
+ },
+ "item": {
+  "vagueSellCount": "4",
+  "images": [
+   "https://img.alicdn.com/imgextra/i3/4066234693/O1CN01CKF4hN1kXRt3644uC_!!4066234693-0-tmg_sticker_daily.jpg",
+   "https://img.alicdn.com/imgextra/i2/2201168176213/O1CN01LQKCAx1vlbtah1mHu_!!2201168176213.jpg",
+   "https://img.alicdn.com/imgextra/i4/2201168176213/O1CN012UtgvJ1vlbtb2DMn4_!!2201168176213.jpg",
+   "https://img.alicdn.com/imgextra/i2/2201168176213/O1CN01sNb7rf1vlbtaiOWGD_!!2201168176213.jpg",
+   "https://img.alicdn.com/imgextra/i3/2201168176213/O1CN01uqxhiB1vlbtb6bN3W_!!2201168176213.jpg"
+  ],
+  "title": "MUJI 无印良品 柔软清凉棉多用途靠垫 55×40×20cm",
+  "itemId": "1050906790941",
+  "useWirelessDesc": "true",
+  "qrCode": "https://h5.m.taobao.com/awp/core/detail.htm?id=1050906790941",
+  "pcADescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=1050906790941&descVersion=7.0&type=1&f=icoss!01050906790941!11494749693&sellerType=B",
+  "bottomIcons": [],
+  "spuId": "0",
+  "titleIcon": "//gw.alicdn.com/tfs/TB1KuplSpXXXXawXpXXXXXXXXXX-135-36.png"
+ },
+ "feature": {
+  "pcResistDetail": "false",
+  "tmwOverseasScene": "false",
+  "pcIdentityRisk": "false",
+  "tmallhkScene": "true"
+ },
+ "plusViewVO": {
+  "askAnswerVO": {
+   "ext": {
+    "skeletonImg": "https://img.alicdn.com/imgextra/i2/O1CN01MLPxBr1flZy969k5W_!!6000000004047-2-tps-1376-1216.png"
+   },
+   "hit": "true"
+  },
+  "guessLikeVO": {
+   "hit": "true"
+  },
+  "wangwangFlowSplitVO": {
+   "hit": "true"
+  },
+  "rankVO": {
+   "hit": "true"
+  },
+  "tabPlaceholderVO": {
+   "hit": "true"
+  },
+  "industryParamVO": {
+   "hit": "true",
+   "enhanceParamList": [
+    {
+     "valueName": "靠垫",
+     "propertyName": "抱枕枕靠类型",
+     "structPv": "false"
+    },
+    {
+     "valueName": "靠垫",
+     "propertyName": "商品品类",
+     "structPv": "false"
+    },
+    {
+     "valueName": "20",
+     "propertyName": "厚度(cm)",
+     "structPv": "false"
+    },
+    {
+     "valueName": "客厅",
+     "propertyName": "适用空间",
+     "structPv": "false"
+    }
+   ],
+   "basicParamList": [
+    {
+     "valueName": "MUJI/无印良品",
+     "propertyName": "品牌"
+    },
+    {
+     "valueName": "40",
+     "propertyName": "长度"
+    },
+    {
+     "valueName": "55",
+     "propertyName": "宽度"
+    },
+    {
+     "valueName": "通用",
+     "propertyName": "适用人群"
+    },
+    {
+     "valueName": "纯色",
+     "propertyName": "主图案类型"
+    },
+    {
+     "valueName": "象牙色 灰色 浅蓝色",
+     "propertyName": "颜色分类"
+    }
+   ]
+  },
+  "imageSearchVO": {
+   "ext": {
+    "textList": [
+     "商品已经下架啦~要不要瞧瞧别的~",
+     "该区域暂不支持购买",
+     "此商品不支持在当前地区销售",
+     "商品已经卖光啦~",
+     "当前商品仅限店铺会员购买",
+     "商品已经卖光啦，非常抱歉",
+     "店铺正在打烊中，当前商品不可下单",
+     "商品已经卖光啦～",
+     "当前库存已售完",
+     "该商品有卖家设置的购买门槛，须达门槛才可购买噢～",
+     "此商品暂时不能购买"
+    ]
+   },
+   "spm": "aliabtest1115297_1138353",
+   "hit": "true"
+  },
+  "reportEntranceVO": {
+   "spm": "aliabtest1097211_1051854",
+   "hit": "true"
+  },
+  "headAtmosphereBeltVO": {
+   "eventParam": {
+    "code": "dp-PCEightRefundSuper-*-online"
+   },
+   "icon": "https://img.alicdn.com/imgextra/i2/O1CN01RzoirR1IqOqWPAXkz_!!6000000000944-2-tps-92-48.png",
+   "bgColors": [
+    "#FAEDE1",
+    "#FAE7D4"
+   ],
+   "textColor": "#11192D",
+   "valid": "true",
+   "actionType": "button",
+   "hit": "true",
+   "text": "开通88VIP，可享全年退货包运费，每单最高省25元",
+   "actionImg": "https://img.alicdn.com/imgextra/i4/O1CN01ie9ezx1YiBb0H6XLY_!!6000000003092-2-tps-136-52.png",
+   "actionParam": {
+    "linkUrl": "https://pages-fast.m.taobao.com/wow/z/blackvip/v/pc-super?x-render-mode=csr&from=pc_thpiaotiao",
+    "buttonActionType": "openPage"
+   }
+  },
+  "commentListVO": {
+   "ext": {
+    "countShow": "\"false\""
+   },
+   "hit": "true"
+  },
+  "pcFrontSkuQuantityLimitVO": {
+   "hit": "true"
+  },
+  "buyParamVO": {
+   "ext": {
+    "autoApplCoupSource": "pcDetailOrder",
+    "needAutoApplCoup": "true"
+   },
+   "hit": "true"
+  }
+ },
+ "skuCore": {
+  "skuItem": {
+   "renderSku": "true",
+   "itemStatus": 0,
+   "unitBuy": 1
+  },
+  "sku2info": {
+   "0": {
+    "moreQuantity": "false",
+    "quantity": 17,
+    "logisticsTime": "预售，付款后10天内发货",
+    "price": {
+     "priceTitle": "优惠前",
+     "priceColorNew": "#7A7A7A",
+     "priceText": "522",
+     "priceDesc": "起",
+     "priceMoney": "52200"
+    },
+    "limit": "5",
+    "quantityDisplayValue": 1,
+    "quantityText": "有货(限购5件)",
+    "buyExParams": {
+     "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+    },
+    "subPrice": {
+     "priceColor": "#FFFFFF",
+     "priceTitle": "店铺优惠后",
+     "priceColorNew": "#FF5000",
+     "priceBgColor": "#FF5000",
+     "priceTitleColor": "#FFFFFF",
+     "priceText": "382起",
+     "priceMoney": "38200"
+    }
+   },
+   "6249002683699": {
+    "moreQuantity": "false",
+    "quantity": 6,
+    "logisticsTime": "预售，付款后10天内发货",
+    "price": {
+     "priceTitle": "优惠前",
+     "priceColorNew": "#7A7A7A",
+     "priceText": "565",
+     "priceMoney": "56500"
+    },
+    "limit": "5",
+    "quantityDisplayValue": 1,
+    "quantityText": "即将售罄(限购5件)",
+    "buyExParams": {
+     "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+    },
+    "subPrice": {
+     "priceColor": "#FFFFFF",
+     "priceTitle": "店铺优惠后",
+     "priceColorNew": "#FF5000",
+     "priceBgColor": "#FF5000",
+     "priceTitleColor": "#FFFFFF",
+     "priceText": "420",
+     "priceMoney": "42000"
+    }
+   },
+   "6249002683698": {
+    "moreQuantity": "false",
+    "quantity": 6,
+    "logisticsTime": "预售，付款后10天内发货",
+    "price": {
+     "priceTitle": "优惠前",
+     "priceColorNew": "#7A7A7A",
+     "priceText": "540",
+     "priceMoney": "54000"
+    },
+    "limit": "5",
+    "quantityDisplayValue": 1,
+    "quantityText": "即将售罄(限购5件)",
+    "buyExParams": {
+     "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+    },
+    "subPrice": {
+     "priceColor": "#FFFFFF",
+     "priceTitle": "店铺优惠后",
+     "priceColorNew": "#FF5000",
+     "priceBgColor": "#FF5000",
+     "priceTitleColor": "#FFFFFF",
+     "priceText": "398",
+     "priceMoney": "39800"
+    }
+   },
+   "6249002683697": {
+    "moreQuantity": "false",
+    "quantity": 5,
+    "logisticsTime": "预售，付款后10天内发货",
+    "price": {
+     "priceTitle": "优惠前",
+     "priceColorNew": "#7A7A7A",
+     "priceText": "522",
+     "priceMoney": "52200"
+    },
+    "limit": "5",
+    "quantityDisplayValue": 1,
+    "quantityText": "即将售罄(限购5件)",
+    "buyExParams": {
+     "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+    },
+    "subPrice": {
+     "priceColor": "#FFFFFF",
+     "priceTitle": "店铺优惠后",
+     "priceColorNew": "#FF5000",
+     "priceBgColor": "#FF5000",
+     "priceTitleColor": "#FFFFFF",
+     "priceText": "382",
+     "priceMoney": "38200"
+    }
+   }
+  }
+ },
+ "params": {
+  "trackParams": {
+   "detailabtestdetail": ""
+  },
+  "safeParams": {
+   "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+  },
+  "aplusParams": "[]"
+ },
+ "skuBase": {
+  "components": [],
+  "skus": [
+   {
+    "propPath": "1627207:4341408;-1:-1",
+    "skuId": "6249002683697"
+   },
+   {
+    "propPath": "1627207:28334;-1:-1",
+    "skuId": "6249002683698"
+   },
+   {
+    "propPath": "1627207:28337;-1:-1",
+    "skuId": "6249002683699"
+   }
+  ],
+  "props": [
+   {
+    "hasGroupTags": "false",
+    "packProp": "false",
+    "shouldGroup": "false",
+    "comboProperty": "false",
+    "values": [
+     {
+      "comboPropertyValue": "false",
+      "vid": "4341408",
+      "corner": {},
+      "image": "https://gw.alicdn.com/bao/uploaded/i4/2201168176213/O1CN01MQADM51vlbtaiNB9U_!!2201168176213.jpg",
+      "name": "象牙色",
+      "selected": false,
+      "empty": false
+     },
+     {
+      "comboPropertyValue": "false",
+      "vid": "28334",
+      "corner": {},
+      "image": "https://gw.alicdn.com/bao/uploaded/i1/2201168176213/O1CN01aJa3EX1vlbtb0zErj_!!2201168176213.jpg",
+      "name": "灰色",
+      "selected": false,
+      "empty": false
+     },
+     {
+      "comboPropertyValue": "false",
+      "vid": "28337",
+      "corner": {
+       "cornerBackgroundColor": "#ff5000",
+       "skuCornerIcon": "",
+       "cornerPVPath": "1627207:28337",
+       "cornerBorderColor": "#FFFFFF",
+       "cornerText": "多人加购",
+       "cornerTextColor": "#FFFFFF"
+      },
+      "image": "https://gw.alicdn.com/bao/uploaded/i2/2201168176213/O1CN01BysXKH1vlbtazHDVh_!!2201168176213.jpg",
+      "name": "浅蓝色",
+      "selected": false,
+      "empty": false
+     }
+    ],
+    "hasImage": "true",
+    "pid": "1627207",
+    "bigImageMode": "true",
+    "nameDesc": "（3）",
+    "name": "颜色分类",
+    "showSizeRecommend": "false",
+    "valueMap": {
+     "28334": {
+      "comboPropertyValue": "false",
+      "vid": "28334",
+      "corner": {},
+      "image": "https://gw.alicdn.com/bao/uploaded/i1/2201168176213/O1CN01aJa3EX1vlbtb0zErj_!!2201168176213.jpg",
+      "name": "灰色",
+      "selected": false,
+      "empty": false
+     },
+     "28337": {
+      "comboPropertyValue": "false",
+      "vid": "28337",
+      "corner": {
+       "cornerBackgroundColor": "#ff5000",
+       "skuCornerIcon": "",
+       "cornerPVPath": "1627207:28337",
+       "cornerBorderColor": "#FFFFFF",
+       "cornerText": "多人加购",
+       "cornerTextColor": "#FFFFFF"
+      },
+      "image": "https://gw.alicdn.com/bao/uploaded/i2/2201168176213/O1CN01BysXKH1vlbtazHDVh_!!2201168176213.jpg",
+      "name": "浅蓝色",
+      "selected": false,
+      "empty": false
+     },
+     "4341408": {
+      "comboPropertyValue": "false",
+      "vid": "4341408",
+      "corner": {},
+      "image": "https://gw.alicdn.com/bao/uploaded/i4/2201168176213/O1CN01MQADM51vlbtaiNB9U_!!2201168176213.jpg",
+      "name": "象牙色",
+      "selected": false,
+      "empty": false
+     }
+    }
+   },
+   {
+    "hasGroupTags": "false",
+    "packProp": "false",
+    "shouldGroup": "false",
+    "comboProperty": "false",
+    "values": [
+     {
+      "comboPropertyValue": "false",
+      "vid": "-1",
+      "corner": {},
+      "name": "One Size",
+      "selected": true,
+      "empty": false
+     }
+    ],
+    "hasImage": "false",
+    "pid": "-1",
+    "name": "规格",
+    "showSizeRecommend": "false",
+    "valueMap": {
+     "-1": {
+      "comboPropertyValue": "false",
+      "vid": "-1",
+      "corner": {},
+      "name": "One Size",
+      "selected": true,
+      "empty": false
+     }
+    }
+   }
+  ]
+ },
+ "plusViewFieldMappingVO": {
+  "headAtmosphere": [
+   {
+    "headAtmosphereBeltVO": {
+     "eventParam": {
+      "code": "dp-PCEightRefundSuper-*-online"
+     },
+     "icon": "https://img.alicdn.com/imgextra/i2/O1CN01RzoirR1IqOqWPAXkz_!!6000000000944-2-tps-92-48.png",
+     "valid": "true",
+     "hit": "true",
+     "text": "开通88VIP，可享全年退货包运费，每单最高省25元",
+     "bgColors": [
+      "#FAEDE1",
+      "#FAE7D4"
+     ],
+     "textColor": "#11192D",
+     "eventCode": "dp-PCEightRefundSuper-*-online",
+     "actionType": "button",
+     "actionImg": "https://img.alicdn.com/imgextra/i4/O1CN01ie9ezx1YiBb0H6XLY_!!6000000003092-2-tps-136-52.png",
+     "actionParam": {
+      "linkUrl": "https://pages-fast.m.taobao.com/wow/z/blackvip/v/pc-super?x-render-mode=csr&from=pc_thpiaotiao",
+      "buttonActionType": "openPage"
+     }
+    }
+   }
+  ]
+ },
+ "pcTrade": {
+  "buyNowUrl": "//buy.tmall.hk/order/confirm_order.htm",
+  "pcCartParam": {
+   "areaId": "440305",
+   "addressId": "22089104489",
+   "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+  },
+  "pcBuyExParams": {
+   "mi_id": "0000RDOg7sert3gOQGUHvvQD2AkB0LZDDGECNllMhyY2w-CyMAnRm-pVEsiVYIFf4M-K"
+  },
+  "pcBuyParams": {
+   "virtual": "false",
+   "buy_now": "1099.00",
+   "auction_type": "b",
+   "x-uid": "",
+   "title": "MUJI 无印良品 柔软清凉棉多用途靠垫 55&times;40&times;20cm",
+   "buyer_from": "ecity",
+   "page_from_type": "main_site_pc",
+   "detailIsLimit": "false",
+   "who_pay_ship": "卖家承担运费",
+   "rootCatId": "122852001",
+   "routeToNewPc": "1",
+   "auto_post": "false",
+   "seller_nickname": "天猫国际全球探物",
+   "photo_url": "i3/4066234693/O1CN01CKF4hN1kXRt3644uC_!!4066234693-0-tmg_sticker_daily.jpg",
+   "current_price": "1099.00",
+   "region": "日本",
+   "seller_id": "c52d0c6969556ae2b2e7b004865a7f14",
+   "etm": ""
+  },
+  "tradeType": 8
+ },
+ "componentsVO": {
+  "headImageVO": {
+   "images": [
+    "https://img.alicdn.com/imgextra/i3/4066234693/O1CN01CKF4hN1kXRt3644uC_!!4066234693-0-tmg_sticker_daily.jpg",
+    "https://img.alicdn.com/imgextra/i2/2201168176213/O1CN01LQKCAx1vlbtah1mHu_!!2201168176213.jpg",
+    "https://img.alicdn.com/imgextra/i4/2201168176213/O1CN012UtgvJ1vlbtb2DMn4_!!2201168176213.jpg",
+    "https://img.alicdn.com/imgextra/i2/2201168176213/O1CN01sNb7rf1vlbtaiOWGD_!!2201168176213.jpg",
+    "https://img.alicdn.com/imgextra/i3/2201168176213/O1CN01uqxhiB1vlbtb6bN3W_!!2201168176213.jpg"
+   ],
+   "videos": []
+  },
+  "headerVO": {
+   "logoJumpUrl": "http://www.tmall.hk",
+   "mallLogo": "https://img.alicdn.com/imgextra/i1/O1CN01nToS041IQkWFthCav_!!6000000000888-2-tps-936-106.png",
+   "searchText": "搜索宝贝",
+   "buttons": [
+    {
+     "subTitle": {},
+     "background": {
+      "gradientColor": [
+       "#7A3BE7",
+       "#B948F1"
+      ],
+      "alpha": "1.0",
+      "disabledAlpha": "1.0"
+     },
+     "disabled": "false",
+     "title": {
+      "text": "搜天猫国际"
+     },
+     "type": "search_in_tmallhk",
+     "events": [
+      {
+       "type": "onClick",
+       "fields": {
+        "url": "//pages.tmall.com/wow/z/import/tmg-ch-tubes/fJiiCQT5DbMxQXAaQeGc"
+       }
+      }
+     ]
+    },
+    {
+     "subTitle": {},
+     "background": {
+      "gradientColor": [
+       "#343434"
+      ],
+      "alpha": "1.0",
+      "disabledAlpha": "1.0"
+     },
+     "disabled": "false",
+     "title": {
+      "text": "搜本店"
+     },
+     "type": "search_in_store",
+     "events": [
+      {
+       "type": "onClick",
+       "fields": {
+        "url": "//shop479456214.taobao.com/search.htm"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "storeCardVO": {
+   "buttons": [
+    {
+     "image": {
+      "imageUrl": "https://img.alicdn.com/imgextra/i1/O1CN016DNujx1yMMj6NMXVv_!!6000000006564-55-tps-24-24.svg",
+      "gifAnimated": "false"
+     },
+     "disabled": "false",
+     "title": {
+      "text": "客服"
+     },
+     "type": "customer_service"
+    },
+    {
+     "image": {
+      "imageUrl": "https://img.alicdn.com/imgextra/i4/O1CN01jn67ow1ZhYeiTJlZn_!!6000000003226-55-tps-24-24.svg",
+      "gifAnimated": "false"
+     },
+     "disabled": "false",
+     "title": {
+      "text": "进店"
+     },
+     "type": "enter_shop",
+     "events": [
+      {
+       "type": "openUrl",
+       "fields": {
+        "url": "//shop479456214.taobao.com"
+       }
+      }
+     ]
+    }
+   ],
+   "overallScore": "4.6",
+   "shopIcon": "https://img.alicdn.com/imgextra/i4/6000000003216/O1CN01iQgDcv1ZcyWMeVMRD_!!6000000003216-2-shopmanager.png",
+   "shopName": "天猫国际全球探物",
+   "evaluates": [
+    {
+     "score": "4.6",
+     "title": "宝贝质量"
+    },
+    {
+     "score": "4.8",
+     "title": "物流速度"
+    },
+    {
+     "score": "4.5",
+     "title": "服务保障"
+    }
+   ],
+   "shopUrl": "//shop479456214.taobao.com",
+   "labelList": [],
+   "creditLevel": "17",
+   "creditLevelIcon": "//gw.alicdn.com/tfs/TB1MpufDhjaK1RjSZKzXXXVwXXa-165-45.png",
+   "sellerType": "B",
+   "starNum": "4.5"
+  },
+  "titleVO": {
+   "salesDesc": "已售 4",
+   "subTitles": [],
+   "title": {
+    "title": "MUJI 无印良品 柔软清凉棉多用途靠垫 55×40×20cm"
+   }
+  },
+  "debugVO": {
+   "traceId": "c0a97a9917914692803916971e",
+   "host": "taodetail033084117028.center.na610@33.84.117.28"
+  },
+  "rateVO": {
+   "totalCount": "0",
+   "favorableRate": {}
+  },
+  "umpPriceLogVO": {
+   "umpCreateTime": "2026-10-08 22:21:20",
+   "traceId": "c0a97a9917914692803916971e",
+   "xObjectId": "1050906790941",
+   "type": 99,
+   "bcType": "b",
+   "version": "2.1",
+   "sId": "0",
+   "bS": "businessScenario",
+   "sellerId": "4066234693",
+   "dUmpInvoke": 0,
+   "map": "{}"
+  },
+  "deliveryVO": {
+   "agingDescColor": "#1F1F1F",
+   "freight": "快递:  免运费",
+   "deliveryFromAddr": "境外仓",
+   "addressId": "22089104489",
+   "deliverToCity": "深圳市",
+   "areaId": 440305,
+   "deliveryToAddr": "深圳市 南山区 南头街道",
+   "agingDesc": "预售，付款后10天内发货",
+   "deliveryToDistrict": "南山区"
+  },
+  "o2oVo": {
+   "enableJzLocalizationProduct": "false"
+  },
+  "bottomBarVO": {
+   "rightButtons": [
+    {
+     "icon": {
+      "iconFontName": "뀚",
+      "color": "#666666",
+      "size": "14",
+      "alpha": "1.0",
+      "disabledColor": "#dddddd",
+      "disabledAlpha": "1.0"
+     },
+     "disabled": "false",
+     "title": {
+      "color": "#666666",
+      "alpha": "1.0",
+      "fontSize": "14",
+      "bold": "false",
+      "text": "收藏",
+      "disabledColor": "#666666",
+      "disabledAlpha": "1.0"
+     },
+     "type": "collect"
+    }
+   ],
+   "buyInMobile": "false",
+   "leftButtons": [
+    {
+     "background": {
+      "gradientColor": [
+       "#9D6FFA",
+       "#8B24DC"
+      ],
+      "alpha": "1.0",
+      "disabledColor": [
+       "#9D6FFA",
+       "#8B24DC"
+      ],
+      "disabledAlpha": "1.0"
+     },
+     "disabled": "false",
+     "title": {
+      "color": "#ffffff",
+      "alpha": "1.0",
+      "fontSize": "16",
+      "bold": "true",
+      "text": "加入购物车",
+      "disabledColor": "#33ffffff",
+      "disabledAlpha": "0.2"
+     },
+     "type": "add_cart"
+    },
+    {
+     "background": {
+      "gradientColor": [
+       "#FB49CE",
+       "#FF2B6C"
+      ],
+      "alpha": "1.0",
+      "disabledColor": [
+       "#FB49CE",
+       "#FF2B6C"
+      ],
+      "disabledAlpha": "1.0"
+     },
+     "disabled": "false",
+     "title": {
+      "color": "#ffffff",
+      "alpha": "1.0",
+      "fontSize": "16",
+      "bold": "true",
+      "text": "领券购买",
+      "disabledColor": "#80ffffff",
+      "disabledAlpha": "0.2"
+     },
+     "type": "buy_now"
+    }
+   ]
+  },
+  "extensionInfoVO": {
+   "infos": [
+    {
+     "hitCanBeEnjoyedAgainAbTest": "true",
+     "title": "优惠",
+     "type": "DAILY_COUPON",
+     "items": [
+      {
+       "detail4Text": [
+        {
+         "text": "官方立减12%省63元",
+         "bold": "false",
+         "type": "TEXT"
+        }
+       ],
+       "text": [
+        "官方立减12%省63元"
+       ]
+      },
+      {
+       "detail4Text": [
+        {
+         "text": "每件直降77元",
+         "bold": "false",
+         "type": "TEXT"
+        }
+       ],
+       "text": [
+        "每件直降77元"
+       ]
+      }
+     ]
+    },
+    {
+     "hitCanBeEnjoyedAgainAbTest": "true",
+     "title": "可再享",
+     "type": "CAN_BE_ENJOYED_AGAIN",
+     "items": [
+      {
+       "detail4Text": [
+        {
+         "text": "享95折",
+         "bold": "false",
+         "type": "TEXT"
+        }
+       ],
+       "text": [
+        "享95折"
+       ]
+      },
+      {
+       "detail4Text": [
+        {
+         "text": "探物家居券满2500减120",
+         "bold": "false",
+         "type": "TEXT"
+        }
+       ],
+       "text": [
+        "探物家居券满2500减120"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "活动",
+     "type": "ACTIVITIES",
+     "items": [
+      {
+       "icon": "https://gw.alicdn.com/imgextra/i2/O1CN017ZsqJR1wHCv11V4bP_!!6000000006282-2-tps-269-54.png",
+       "text": [
+        "0元入会，抢限量好券"
+       ]
+      },
+      {
+       "icon": "https://img.alicdn.com/imgextra/i4/O1CN01rH1w2t1muuzylT92V_!!6000000005015-2-tps-268-53.png",
+       "text": [
+        "进补贴会场，抢真5折好货"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "保障",
+     "type": "GUARANTEE",
+     "items": [
+      {
+       "text": [
+        "退货宝",
+        "不支持7天无理由退货",
+        "正品保障",
+        "证照公示"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "参数",
+     "type": "BASE_PROPS",
+     "items": [
+      {
+       "text": [
+        "MUJI/无印良品"
+       ],
+       "title": "品牌"
+      },
+      {
+       "text": [
+        "20"
+       ],
+       "title": "厚度(cm)"
+      },
+      {
+       "text": [
+        "40"
+       ],
+       "title": "长度"
+      },
+      {
+       "text": [
+        "靠垫"
+       ],
+       "title": "商品品类"
+      },
+      {
+       "text": [
+        "55"
+       ],
+       "title": "宽度"
+      },
+      {
+       "text": [
+        "靠垫"
+       ],
+       "title": "抱枕枕靠类型"
+      },
+      {
+       "text": [
+        "通用"
+       ],
+       "title": "适用人群"
+      },
+      {
+       "text": [
+        "纯色"
+       ],
+       "title": "主图案类型"
+      },
+      {
+       "text": [
+        "客厅"
+       ],
+       "title": "适用空间"
+      },
+      {
+       "text": [
+        "象牙色 灰色 浅蓝色"
+       ],
+       "title": "颜色分类"
+      }
+     ]
+    },
+    {
+     "title": "保障",
+     "type": "GUARANTEE_NEW",
+     "items": [
+      {
+       "icon": "https://gw.alicdn.com/imgextra/i3/O1CN01ywvaIw1Vf23dTriiP_!!6000000002679-2-tps-88-88.png",
+       "text": [
+        "退货运费险保障，若选择上门取件，自动抵扣3公斤内运费，使用快递柜寄件或者驿站自寄自动抵扣1公斤内运费；若选择自行寄回，参照1公斤标准补偿，具体以“订单详情-退货宝”为准"
+       ],
+       "title": "退货宝"
+      },
+      {
+       "icon": "https://gw.alicdn.com/imgextra/i2/O1CN01rGRSdc27ieaMPmbtb_!!6000000007831-2-tps-88-88.png",
+       "text": [
+        "此商品不支持7天无理由退货"
+       ],
+       "title": "不支持7天无理由退货"
+      },
+      {
+       "icon": "https://gw.alicdn.com/imgextra/i2/O1CN01rGRSdc27ieaMPmbtb_!!6000000007831-2-tps-88-88.png",
+       "action": "查看",
+       "text": [
+        "100%正品，假一赔十"
+       ],
+       "title": "正品保障",
+       "actionLink": "https://huodong.taobao.com/wow/z/zebra/rules/zhengpinbaozhang"
+      },
+      {
+       "icon": "https://gw.alicdn.com/imgextra/i2/O1CN01rGRSdc27ieaMPmbtb_!!6000000007831-2-tps-88-88.png",
+       "action": "查看",
+       "text": [
+        "证照公示"
+       ],
+       "title": "证照公示",
+       "actionLink": "//www.tmall.hk/wow/z/import/pegasus-no-head/Gr3QWZwPfyEaWkbZQfFx?xid=c52d0c6969556ae2b2e7b004865a7f14"
+      }
+     ]
+    }
+   ]
+  },
+  "rightBarVO": {
+   "toolkit": {
+    "survey": {
+     "icon": "https://gw.alicdn.com/imgextra/i3/O1CN01js47DP1J3DxYBQG4g_!!6000000000972-1-tps-56-56.gif",
+     "disabled": "false",
+     "href": "https://survey.taobao.com/apps/zhiliao/GUShqv-xp",
+     "label": "用户调研",
+     "priority": 201,
+     "type": null
+    },
+    "webww2": {
+     "openType": "manual",
+     "icon": "https://img.alicdn.com/imgextra/i2/O1CN012pqGiT1gp4XhKkkRs_!!6000000004190-2-tps-96-96.png",
+     "disabled": "false",
+     "label": "联系客服",
+     "priority": 200,
+     "type": null
+    },
+    "cart2": {
+     "icon": "https://img.alicdn.com/imgextra/i4/O1CN01FOK30u1SymJbsQUtk_!!6000000002316-2-tps-96-96.png",
+     "disabled": "false",
+     "href": "//cart.taobao.com",
+     "label": "购物车",
+     "priority": 199,
+     "type": null
+    },
+    "qrcode": {
+     "priority": 198,
+     "url": "https://pages-g.m.taobao.com/wow/z/app/detail-next/item/index?fromPc=true&id=1050906790941",
+     "spm": "pc_detail.30350276.sidebar.qrcode",
+     "icon": "https://img.alicdn.com/imgextra/i3/O1CN01CkZbKp27arsx4ktdK_!!6000000007814-2-tps-96-96.png",
+     "disabled": "false",
+     "href": "https://h5.m.taobao.com/awp/core/detail.htm?id=1050906790941",
+     "label": "商品码",
+     "type": null
+    },
+    "plugin": {
+     "icon": "https://gw.alicdn.com/imgextra/i4/O1CN0165n4Cr1CGK2faBVbj_!!6000000000053-1-tps-56-56.gif",
+     "disabled": "false",
+     "href": "https://pc.taobao.com?channel=item",
+     "label": "桌面版",
+     "priority": 197,
+     "type": null
+    },
+    "copyUrl": {
+     "openType": "manual",
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN01Go6lqn28DnZ3MlmFE_!!6000000007899-2-tps-96-96.png",
+     "disabled": "false",
+     "label": "复制链接",
+     "priority": 196,
+     "type": null
+    },
+    "feedback": {
+     "priority": 195,
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN01at70Km26oJu1Kk0vt_!!6000000007708-2-tps-96-96.png",
+     "disabled": "false",
+     "type": null
+    },
+    "backTop": {
+     "disabled": "false",
+     "priority": 1,
+     "type": null
+    }
+   },
+   "buyerButtons": [
+    {
+     "icon": "https://gw.alicdn.com/imgextra/i3/O1CN01js47DP1J3DxYBQG4g_!!6000000000972-1-tps-56-56.gif",
+     "disabled": "false",
+     "href": "https://survey.taobao.com/apps/zhiliao/GUShqv-xp",
+     "label": "用户调研",
+     "priority": 201,
+     "type": "survey"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i2/O1CN012pqGiT1gp4XhKkkRs_!!6000000004190-2-tps-96-96.png",
+     "disabled": "false",
+     "label": "联系客服",
+     "priority": 200,
+     "type": "webww2"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i4/O1CN01FOK30u1SymJbsQUtk_!!6000000002316-2-tps-96-96.png",
+     "disabled": "false",
+     "href": "//cart.taobao.com",
+     "label": "购物车",
+     "priority": 199,
+     "type": "cart2"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i3/O1CN01CkZbKp27arsx4ktdK_!!6000000007814-2-tps-96-96.png",
+     "disabled": "false",
+     "href": "https://h5.m.taobao.com/awp/core/detail.htm?id=1050906790941",
+     "label": "商品码",
+     "priority": 198,
+     "type": "qrcode"
+    },
+    {
+     "icon": "https://gw.alicdn.com/imgextra/i4/O1CN0165n4Cr1CGK2faBVbj_!!6000000000053-1-tps-56-56.gif",
+     "disabled": "false",
+     "href": "https://pc.taobao.com?channel=item",
+     "label": "桌面版",
+     "priority": 197,
+     "type": "plugin"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN01Go6lqn28DnZ3MlmFE_!!6000000007899-2-tps-96-96.png",
+     "disabled": "false",
+     "label": "复制链接",
+     "priority": 196,
+     "type": "copyUrl"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN01at70Km26oJu1Kk0vt_!!6000000007708-2-tps-96-96.png",
+     "disabled": "false",
+     "priority": 195,
+     "type": "feedback"
+    },
+    {
+     "disabled": "false",
+     "priority": 1,
+     "type": "backTop"
+    }
+   ],
+   "sellerButtons": []
+  },
+  "payVO": {
+   "payConfigList": [
+    {
+     "text": "信用卡支付"
+    }
+   ]
+  },
+  "priceVO": {
+   "extraPrice": {
+    "priceUnit": "￥",
+    "priceColor": "#FFFFFF",
+    "priceTitle": "店铺优惠后",
+    "priceColorNew": "#FF5000",
+    "priceBgColor": "#FF5000",
+    "priceTitleColor": "#FFFFFF",
+    "priceText": "382",
+    "priceDesc": "起",
+    "priceMoney": "38200",
+    "hiddenPrice": "false"
+   },
+   "price": {
+    "priceUnit": "￥",
+    "priceColor": "#FF4F00",
+    "priceTitle": "优惠前",
+    "priceColorNew": "#7A7A7A",
+    "priceTitleColor": "#FF4F00",
+    "priceText": "522",
+    "priceDesc": "起",
+    "priceMoney": "52200",
+    "hiddenPrice": "false"
+   },
+   "isNewStyle": "true"
+  },
+  "webfontVO": {
+   "enableWebfont": "false"
+  },
+  "tabVO": {
+   "tabList": [
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN016DNujx1yMMj6NMXVv_!!6000000006564-55-tps-24-24.svg",
+     "name": "comments",
+     "sort": 1,
+     "title": "用户评价"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN016DNujx1yMMj6NMXVv_!!6000000006564-55-tps-24-24.svg",
+     "name": "base_drops",
+     "sort": 200,
+     "title": "参数信息"
+    },
+    {
+     "name": "factory_qualification",
+     "sort": 500,
+     "title": "验厂资质"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN016DNujx1yMMj6NMXVv_!!6000000006564-55-tps-24-24.svg",
+     "name": "desc",
+     "sort": 600,
+     "title": "图文详情"
+    },
+    {
+     "icon": "https://img.alicdn.com/imgextra/i1/O1CN016DNujx1yMMj6NMXVv_!!6000000006564-55-tps-24-24.svg",
+     "name": "recommends",
+     "sort": 700,
+     "title": "本店推荐"
+    },
+    {
+     "name": "guessULike",
+     "sort": 900,
+     "title": "看了又看"
+    }
+   ]
+  },
+  "priceDescVO": {
+   "descItems": [
+    {
+     "richText": [
+      {
+       "style": {
+        "color": "#999999"
+       },
+       "text": "进口税 价格已含税 "
+      },
+      {
+       "imageUrl": "https://gw.alicdn.com/tfs/TB1J38IkkL0gK0jSZFxXXXWHVXa-38-38.png?getAvatar=avatar",
+       "style": {},
+       "type": "image"
+      }
+     ],
+     "isRichText": "true",
+     "sku2Text": {
+      "0": "进口税 价格已含税 ",
+      "6249002683699": "进口税 价格已含税 ",
+      "6249002683698": "进口税 价格已含税 ",
+      "6249002683697": "进口税 价格已含税 "
+     },
+     "text": "进口税 价格已含税 ",
+     "event": [
+      {
+       "type": "openFloatDialog",
+       "fields": {
+        "url": "https://pages.tmall.com/wow/import/act/detail-taxes?wh_biz=tm&wh_weex=true&data=%7B%22taxDescTittle%22%3A%22%E7%A8%8E%E8%B4%B9%E8%AF%B4%E6%98%8E%22%2C%22taxDesc%22%3A%5B%7B%22%E5%95%86%E5%93%81%E8%BF%9B%E5%8F%A3%E7%A8%8E%22%3A%7B%22%E6%82%A8%E6%89%80%E8%B4%AD%E4%B9%B0%E7%9A%84%E5%95%86%E5%93%81%E5%B7%B2%E5%8C%85%E5%90%AB%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86%E8%BF%9B%E5%8F%A3%E7%A8%8E%EF%BC%8C%E4%B8%AA%E5%88%AB%E5%95%86%E5%93%81%E7%A8%8E%E8%B4%B9%E7%94%B1%E5%95%86%E5%AE%B6%E6%89%BF%E6%8B%85%EF%BC%8C%E6%82%A8%E6%97%A0%E9%9C%80%E5%86%8D%E8%A1%8C%E6%94%AF%E4%BB%98%E3%80%82%22%3A%22%22%7D%7D%2C%7B%22%E8%BF%9B%E5%8F%A3%E7%A8%8E%E7%A8%8E%E7%8E%87%22%3A%7B%229.1%25%22%3A%22%E4%B8%AD%E5%9B%BD%E6%B5%B7%E5%85%B3%E8%A7%84%E5%AE%9A%EF%BC%8C%E4%B8%8D%E5%90%8C%E7%B1%BB%E7%9B%AE%E7%9A%84%E5%95%86%E5%93%81%E5%BE%81%E6%94%B6%E7%A8%8E%E7%8E%87%E4%B8%8D%E5%90%8C%EF%BC%8C%E8%AF%A5%E5%95%86%E5%93%81%E7%9A%84%E8%BF%9B%E5%8F%A3%E7%A8%8E%E7%8E%87%E4%B8%BA9.1%25%22%7D%7D%2C%7B%22%E8%BF%9B%E5%8F%A3%E7%A8%8E%E8%AE%A1%E7%AE%97%22%3A%7B%22%E8%BF%9B%E5%8F%A3%E7%A8%8E+%3D+%E5%95%86%E5%93%81%E5%AE%8C%E7%A8%8E%E4%BB%B7%E6%A0%BC%28%E5%8C%85%E6%8B%AC%E8%BF%90%E8%B4%B9%29+*+%E7%A8%8E%E7%8E%87%22%3A%22%28%E5%AE%8C%E7%A8%8E%E4%BB%B7%E6%A0%BC%E7%94%B1%E6%B5%B7%E5%85%B3%E6%9C%80%E7%BB%88%E8%AE%A4%E5%AE%9A%29%22%7D%7D%5D%7D"
+       }
+      },
+      {
+       "type": "userTrack",
+       "fields": {
+        "page": "Page_Detail",
+        "eventId": "2101",
+        "arg1": "Page_Detail_Button-TaxRate",
+        "args": {
+         "spm": "a2141.7631564.taxRate"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "frontendVO": {
+  "skuImageLayoutMode": "listMode",
+  "isAplusDropPurlHit": false
+ }
+}

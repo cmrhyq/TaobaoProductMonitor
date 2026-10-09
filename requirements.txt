@@ -1,0 +1,28 @@
+# HTTP client
+httpx>=0.27.0
+
+# Browser automation（唯一抓取通道：PC 详情页 SSR）
+playwright>=1.44.0
+
+# Database ORM
+sqlalchemy>=2.0
+pymysql>=1.1
+
+# Configuration
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+python-dotenv>=1.0.0
+
+# Structured logging
+structlog>=24.1.0
+
+# Template engine
+Jinja2>=3.1
+
+# Task scheduling（服务内嵌调度器）
+schedule>=1.2.0
+
+# Web API（click 为 uvicorn 命令行启动所需，勿删）
+click>=8.1
+fastapi>=0.111
+uvicorn[standard]>=0.29

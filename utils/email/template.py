@@ -4,7 +4,6 @@ Singleton pattern with custom filters for currency formatting.
 """
 
 from decimal import Decimal
-from typing import Union
 
 import structlog
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -15,7 +14,7 @@ logger = structlog.get_logger(__name__)
 
 TEMPLATE_DIR = PROJECT_ROOT / "resource" / "template"
 
-Numeric = Union[Decimal, float, int, str]
+Numeric = Decimal | float | int | str
 
 
 def _currency_filter(value: Numeric) -> str:
@@ -66,12 +65,19 @@ class EmailTemplate:
         current_price: Numeric,
         reduction: Numeric,
         product_url: str,
+        initial_price: Numeric = None,
+        promo_detected: bool = False,
     ) -> str:
-        """Render price reduction notification email with computed percentage."""
+        """Render price reduction notification email with computed percentage.
+
+        original_price is the displayed (struck-through) price; initial_price
+        is the monitoring baseline used for the drop percentage.
+        """
         orig = float(original_price)
         curr = float(current_price)
         drop = float(reduction)
-        drop_percent = (drop / orig * 100) if orig > 0 else 0
+        basis = float(initial_price) if initial_price is not None else orig
+        drop_percent = (drop / basis * 100) if basis > 0 else 0
 
         return self.render(
             "price_reduction.html",
@@ -81,4 +87,5 @@ class EmailTemplate:
             reduction=drop,
             drop_percent=drop_percent,
             product_url=product_url,
+            promo_detected=promo_detected,
         )

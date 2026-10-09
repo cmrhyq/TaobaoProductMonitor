@@ -2,7 +2,6 @@
 Notification repository - data access for the notification_log table.
 """
 
-from typing import Optional
 
 import structlog
 
@@ -18,12 +17,12 @@ class NotificationRepository:
     def insert_notification(
         self,
         product_id: int,
-        rule_id: Optional[int],
+        rule_id: int | None,
         notify_type: str,
         notify_target: str,
         notify_content: str,
         notify_status: int = 1,
-    ) -> Optional[int]:
+    ) -> int | None:
         """Record a notification attempt."""
         try:
             with get_session() as session:

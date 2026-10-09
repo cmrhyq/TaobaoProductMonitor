@@ -1,0 +1,84 @@
+{
+  "api": "mtop.taobao.detail.data.get",
+  "v": "1.0",
+  "ret": ["SUCCESS::调用成功"],
+  "_comment": "合成 fixture：字段结构参照 mtop 详情接口的真实形态，用于回归解析逻辑",
+  "data": {
+    "item": {
+      "itemId": "1050906790941",
+      "title": "MUJI 无印良品 柔软清凉棉多用途靠垫 55×40cm",
+      "subtitle": "柔软清凉棉 多用途 可拆洗",
+      "images": [
+        "//img.alicdn.com/imgextra/i1/xxx/O1CN01aaa_!!0-item_pic.jpg",
+        "https://img.alicdn.com/imgextra/i2/xxx/O1CN01bbb.jpg"
+      ],
+      "vagueSellCount": "2000+"
+    },
+    "seller": {
+      "shopId": "111222333",
+      "sellerId": "444555666",
+      "shopName": "无印良品MUJI官方旗舰店",
+      "evaluation": [{"title": "宝贝描述", "score": "4.9", "level": "high"}]
+    },
+    "skuBase": {
+      "props": [
+        {
+          "pid": "1627207",
+          "name": "颜色分类",
+          "values": [
+            {"vid": "28320", "name": "米白"},
+            {"vid": "28321", "name": "浅灰"}
+          ]
+        }
+      ],
+      "skus": [
+        {"skuId": "4900000001", "propPath": "1627207:28320"},
+        {"skuId": "4900000002", "propPath": "1627207:28321"}
+      ]
+    },
+    "skuCore": {
+      "sku2info": {
+        "0": {
+          "price": {"priceText": "522.00", "priceMoney": 52200},
+          "quantity": "128"
+        },
+        "4900000001": {
+          "price": {"priceText": "522.00", "priceMoney": 52200},
+          "quantity": "100"
+        },
+        "4900000002": {
+          "price": {"priceText": "598.00", "priceMoney": 59800},
+          "quantity": "28"
+        }
+      }
+    },
+    "price": {
+      "price": {"priceText": "522.00", "priceMoney": 52200},
+      "extraPrices": [
+        {"priceText": "598.00", "priceTitle": "原价", "type": "originalPrice"},
+        {"priceText": "500.00", "priceTitle": "券后价", "type": "couponPrice"}
+      ],
+      "promotionTips": "满300减30"
+    },
+    "componentsVO": {
+      "extensionInfoVO": {
+        "infos": [
+          {
+            "title": "优惠",
+            "type": "DAILY_COUPON",
+            "items": [{"text": ["官方立减12%省63元"]}]
+          },
+          {
+            "title": "参数",
+            "type": "BASE_PROPS",
+            "items": [
+              {"title": "品牌", "text": ["MUJI/无印良品"]},
+              {"title": "货号", "text": ["554020cm"]},
+              {"title": "尺寸", "text": ["55×40cm"]}
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
